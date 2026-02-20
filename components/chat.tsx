@@ -72,12 +72,6 @@ export function Chat({
 
   const [input, setInput] = useState<string>("");
   const [showCreditCardAlert, setShowCreditCardAlert] = useState(false);
-  const [currentModelId, setCurrentModelId] = useState(initialChatModel);
-  const currentModelIdRef = useRef(currentModelId);
-
-  useEffect(() => {
-    currentModelIdRef.current = currentModelId;
-  }, [currentModelId]);
 
   const {
     messages,
@@ -126,7 +120,7 @@ export function Chat({
             ...(isToolApprovalContinuation
               ? { messages: request.messages }
               : { message: lastMessage }),
-            selectedChatModel: currentModelIdRef.current,
+            selectedChatModel: initialChatModel,
             selectedVisibilityType: visibilityType,
             ...request.body,
             ...body,
@@ -217,8 +211,6 @@ export function Chat({
               chatId={id}
               input={input}
               messages={messages}
-              onModelChange={setCurrentModelId}
-              selectedModelId={currentModelId}
               selectedVisibilityType={visibilityType}
               sendMessage={sendMessage}
               setAttachments={setAttachments}
@@ -239,7 +231,7 @@ export function Chat({
         isReadonly={isReadonly}
         messages={messages}
         regenerate={regenerate}
-        selectedModelId={currentModelId}
+        selectedModelId={initialChatModel}
         selectedVisibilityType={visibilityType}
         sendMessage={sendMessage}
         setAttachments={setAttachments}

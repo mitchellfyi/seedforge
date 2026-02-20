@@ -2,7 +2,15 @@
 // Opus for project generation (high quality, runs once)
 // Sonnet for coaching (fast, low latency, runs continuously)
 
-export const DEFAULT_CHAT_MODEL = "anthropic/claude-sonnet-4-6";
+const SONNET = "anthropic/claude-sonnet-4-6";
+const HAIKU = "anthropic/claude-haiku-4-5-20251001";
+
+// Chat model: overridable via CHAT_MODEL env var, defaults to Sonnet, falls back to Haiku
+export const DEFAULT_CHAT_MODEL =
+  process.env.CHAT_MODEL || SONNET;
+
+// Fallback model used when the primary is unavailable
+export const FALLBACK_CHAT_MODEL = HAIKU;
 
 export type ChatModel = {
   id: string;
@@ -13,33 +21,14 @@ export type ChatModel = {
 
 export const chatModels: ChatModel[] = [
   {
-    id: "anthropic/claude-sonnet-4-6",
+    id: DEFAULT_CHAT_MODEL,
     name: "Claude Sonnet",
-    provider: "anthropic",
+    provider: DEFAULT_CHAT_MODEL.split("/")[0],
     description: "Fast coaching — used during workspace build sessions",
-  },
-  {
-    id: "anthropic/claude-opus-4-6",
-    name: "Claude Opus",
-    provider: "anthropic",
-    description:
-      "Deep project generation — used for onboarding and project design",
   },
 ];
 
 // Model aliases for different Seedforge contexts
-export const COACHING_MODEL = "anthropic/claude-sonnet-4-6";
+export const COACHING_MODEL = DEFAULT_CHAT_MODEL;
 export const PROJECT_GENERATION_MODEL = "anthropic/claude-opus-4-6";
-export const TITLE_MODEL = "anthropic/claude-sonnet-4-6";
-
-// Group models by provider for UI
-export const modelsByProvider = chatModels.reduce(
-  (acc, model) => {
-    if (!acc[model.provider]) {
-      acc[model.provider] = [];
-    }
-    acc[model.provider].push(model);
-    return acc;
-  },
-  {} as Record<string, ChatModel[]>,
-);
+export const TITLE_MODEL = DEFAULT_CHAT_MODEL;

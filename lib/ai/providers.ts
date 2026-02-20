@@ -1,6 +1,11 @@
 import { gateway } from "@ai-sdk/gateway";
 import { customProvider } from "ai";
 import { isTestEnvironment } from "../constants";
+import {
+  DEFAULT_CHAT_MODEL,
+  FALLBACK_CHAT_MODEL,
+  PROJECT_GENERATION_MODEL,
+} from "./models";
 
 export const myProvider = isTestEnvironment
   ? (() => {
@@ -29,26 +34,26 @@ export function getCoachingModel() {
   if (isTestEnvironment && myProvider) {
     return myProvider.languageModel("chat-model");
   }
-  return gateway.languageModel("anthropic/claude-sonnet-4-6");
+  return gateway.languageModel(DEFAULT_CHAT_MODEL);
 }
 
 export function getProjectDesignerModel() {
   if (isTestEnvironment && myProvider) {
     return myProvider.languageModel("chat-model");
   }
-  return gateway.languageModel("anthropic/claude-opus-4-6");
+  return gateway.languageModel(PROJECT_GENERATION_MODEL);
 }
 
 export function getTitleModel() {
   if (isTestEnvironment && myProvider) {
     return myProvider.languageModel("title-model");
   }
-  return gateway.languageModel("anthropic/claude-sonnet-4-6");
+  return gateway.languageModel(DEFAULT_CHAT_MODEL);
 }
 
 export function getArtifactModel() {
   if (isTestEnvironment && myProvider) {
     return myProvider.languageModel("artifact-model");
   }
-  return gateway.languageModel("anthropic/claude-sonnet-4-6");
+  return gateway.languageModel(DEFAULT_CHAT_MODEL);
 }
