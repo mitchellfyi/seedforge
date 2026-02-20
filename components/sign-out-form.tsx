@@ -9,7 +9,7 @@ export const SignOutForm = () => {
         "use server";
 
         await signOut({
-          redirectTo: "/",
+          redirectTo: "/dashboard",
         });
       }}
       className="w-full"

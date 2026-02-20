@@ -1,0 +1,459 @@
+/* ===== Scene Container ===== */
+.sceneContainer {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  max-height: 1080px;
+  overflow: hidden;
+  background-color: #1a1a2e;
+}
+
+/* ===== Scene Content (positioned layer host) ===== */
+.sceneContent {
+  position: absolute;
+  inset: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+}
+
+/* ===== Parallax Group Wrappers ===== */
+.parallaxForge,
+.parallaxCharacter,
+.parallaxParticles,
+.parallaxWordmark {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.parallaxForge {
+  z-index: 2;
+}
+
+.parallaxParticles {
+  z-index: 5;
+}
+
+.parallaxCharacter {
+  z-index: 6;
+}
+
+.parallaxWordmark {
+  z-index: 7;
+}
+
+/* ===== Layer 1: Background ===== */
+.bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  animation: bgFadeIn 0.8s ease-out both;
+}
+
+@keyframes bgFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===== Layer 2: Anvil ===== */
+.anvil {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(120px, 15vw, 200px);
+  height: auto;
+  image-rendering: pixelated;
+  will-change: transform, opacity;
+  animation: anvilEntrance 0.6s ease-out 0.3s both,
+    anvilStatic 0.01s linear 0.9s both;
+}
+
+@keyframes anvilEntrance {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes anvilStatic {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ===== Layer 3: Seed Glow ===== */
+.seedGlow {
+  position: absolute;
+  bottom: 32%;
+  left: 50%;
+  transform: translate(-50%, 50%) scale(1);
+  width: clamp(100px, 18vw, 240px);
+  height: auto;
+  will-change: transform, opacity;
+  animation: seedGlowEntrance 0.8s ease-out 0.6s both,
+    seedGlowPulse 3s ease-in-out 1.4s infinite;
+}
+
+@keyframes seedGlowEntrance {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 50%) scale(0);
+  }
+  to {
+    opacity: 0.6;
+    transform: translate(-50%, 50%) scale(1);
+  }
+}
+
+@keyframes seedGlowPulse {
+  0%,
+  100% {
+    transform: translate(-50%, 50%) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-50%, 50%) scale(1.15);
+    opacity: 1;
+  }
+}
+
+/* ===== Layer 4: Seed ===== */
+.seed {
+  position: absolute;
+  bottom: 33%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(48px, 8vw, 100px);
+  height: auto;
+  image-rendering: pixelated;
+  will-change: transform, opacity;
+  animation: seedEntrance 0.4s ease-out 0.7s both,
+    seedFloat 3s ease-in-out 1.1s infinite;
+}
+
+@keyframes seedEntrance {
+  from {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes seedFloat {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-4px);
+  }
+}
+
+/* ===== Layer 5: Particle Field ===== */
+.particleField {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  will-change: transform, opacity;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* ===== Layer 6: Character ===== */
+.character {
+  position: absolute;
+  bottom: 12%;
+  left: 35%;
+  width: clamp(60px, 8vw, 110px);
+  height: auto;
+  transform-origin: bottom center;
+  image-rendering: pixelated;
+  will-change: transform, opacity;
+  animation: characterEntrance 0.6s ease-out 0.9s both,
+    characterIdle 2.5s ease-in-out 1.5s infinite;
+}
+
+@keyframes characterEntrance {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes characterIdle {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  40% {
+    transform: translateY(-3px) scaleY(1.015);
+  }
+  70% {
+    transform: translateY(-1px) scaleY(1.005);
+  }
+}
+
+/* ===== Layer 7: Wordmark ===== */
+.wordmarkImg {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(200px, 35vw, 500px);
+  height: auto;
+  image-rendering: pixelated;
+  will-change: transform, opacity;
+  animation: wordmarkFadeIn 0.8s ease-out 1.5s both;
+}
+
+@keyframes wordmarkFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Shimmer overlay */
+.shimmer {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(200px, 35vw, 500px);
+  height: clamp(50px, 8vw, 128px);
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  animation: shimmerFadeIn 0.01s linear 2.3s both;
+}
+
+@keyframes shimmerFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 248, 240, 0.12) 50%,
+    transparent 100%
+  );
+  animation: wordmarkShimmer 4s linear 2.5s infinite;
+  transform: translateX(-100%);
+}
+
+@keyframes wordmarkShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ===== Bottom gradient for CTA readability ===== */
+.bottomGradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(to top, #1a1a2e, transparent);
+  z-index: 8;
+  pointer-events: none;
+}
+
+/* ===== Placeholder fallback ===== */
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 10px;
+  color: #fff8f0;
+  letter-spacing: 0.05em;
+}
+
+.placeholderBg {
+  composes: placeholder;
+  position: absolute;
+  inset: 0;
+  background-color: #1e3a2f;
+  z-index: 1;
+}
+
+.placeholderAnvil {
+  composes: placeholder;
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(120px, 15vw, 200px);
+  height: clamp(80px, 10vw, 130px);
+  background-color: #6b6b7f;
+  border-radius: 4px;
+}
+
+.placeholderSeed {
+  composes: placeholder;
+  position: absolute;
+  bottom: 33%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(48px, 8vw, 80px);
+  height: clamp(48px, 8vw, 80px);
+  background-color: #e8a838;
+  border-radius: 50%;
+}
+
+.placeholderSeedGlow {
+  position: absolute;
+  bottom: 32%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  width: clamp(100px, 18vw, 200px);
+  height: clamp(100px, 18vw, 200px);
+  background: radial-gradient(circle, rgba(245, 215, 122, 0.4), transparent);
+  border-radius: 50%;
+}
+
+.placeholderCharacter {
+  composes: placeholder;
+  position: absolute;
+  bottom: 12%;
+  left: 35%;
+  width: clamp(60px, 8vw, 90px);
+  height: clamp(90px, 12vw, 140px);
+  background-color: #2d5a3d;
+  border-radius: 4px;
+}
+
+.placeholderWordmark {
+  composes: placeholder;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(24px, 4vw, 48px);
+  font-weight: bold;
+  color: #fff8f0;
+  letter-spacing: 0.1em;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .wordmarkImg,
+  .shimmer,
+  .placeholderWordmark {
+    top: 8%;
+  }
+
+  .character,
+  .placeholderCharacter {
+    left: 28%;
+  }
+
+  .anvil,
+  .placeholderAnvil {
+    bottom: 18%;
+  }
+
+  .seedGlow,
+  .placeholderSeedGlow {
+    bottom: 35%;
+  }
+
+  .seed,
+  .placeholderSeed {
+    bottom: 36%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sceneContent {
+    max-width: 900px;
+  }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .bg,
+  .anvil,
+  .seedGlow,
+  .seed,
+  .character,
+  .wordmarkImg {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .seedGlow {
+    transform: translate(-50%, 50%) scale(1);
+    opacity: 0.6 !important;
+  }
+
+  .seed {
+    transform: translateX(-50%);
+  }
+
+  .anvil {
+    transform: translateX(-50%);
+  }
+
+  .character {
+    transform: none;
+  }
+
+  .wordmarkImg {
+    transform: translateX(-50%);
+  }
+
+  .shimmer::after {
+    animation: none !important;
+  }
+
+  .particleField {
+    display: none;
+  }
+
+  .parallaxForge,
+  .parallaxCharacter,
+  .parallaxParticles,
+  .parallaxWordmark {
+    will-change: auto;
+  }
+}
