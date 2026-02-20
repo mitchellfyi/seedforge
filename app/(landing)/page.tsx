@@ -8,19 +8,15 @@ export default function LandingPage() {
   return (
     <div className="min-h-dvh bg-[#1A1A2E] text-white overflow-hidden">
       {/* Nav */}
-      <nav className="relative z-10 flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
-        <div className="flex items-center gap-3">
-          <Image
-            src="/brand/seed.png"
-            alt="Seedforge"
-            width={32}
-            height={32}
-            className="rounded"
-          />
-          <span className="font-bold text-lg tracking-wide text-[#FFF8F0]">
-            Seedforge
-          </span>
-        </div>
+      <nav className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
+        <Image
+          src="/brand/seedforge.png"
+          alt="Seedforge"
+          width={140}
+          height={46}
+          className="h-12 w-auto drop-shadow-[0_0_12px_rgba(212,146,42,0.3)]"
+          priority
+        />
         <Suspense fallback={<NavLinks isLoggedIn={false} />}>
           <AuthAwareNav />
         </Suspense>
@@ -54,7 +50,7 @@ export default function LandingPage() {
       </SeedforgeHeroScene>
 
       {/* Features */}
-      <section className="relative px-6 py-24 bg-gradient-to-b from-[#1A1A2E] to-[#1E3A2F]/30">
+      <section className="relative px-6 pt-40 pb-24 bg-gradient-to-b from-[#1A1A2E] to-[#1E3A2F]/30">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-center text-2xl md:text-3xl font-bold text-[#FFF8F0] mb-4">
             Every skill starts as a seed
