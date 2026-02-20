@@ -17,7 +17,7 @@ export default async function OnboardingPage() {
   return (
     <div className="flex flex-col h-dvh bg-background">
       {/* Header */}
-      <div className="flex items-center justify-center py-6 border-b bg-gradient-to-r from-green-500/5 to-emerald-500/5">
+      <div className="flex items-center justify-center py-6 border-b bg-gradient-to-r from-primary/5 to-accent/20">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Welcome to Seedforge</h1>
           <p className="text-sm text-muted-foreground mt-1">

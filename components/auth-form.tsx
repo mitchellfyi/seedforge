@@ -18,7 +18,7 @@ export function AuthForm({
     <Form action={action} className="flex flex-col gap-4 px-4 sm:px-16">
       <div className="flex flex-col gap-2">
         <Label
-          className="font-normal text-zinc-600 dark:text-zinc-400"
+          className="font-normal text-muted-foreground"
           htmlFor="email"
         >
           Email Address
@@ -27,7 +27,7 @@ export function AuthForm({
         <Input
           autoComplete="email"
           autoFocus
-          className="bg-muted text-md md:text-sm"
+          className="bg-muted text-md md:text-sm focus-visible:ring-primary"
           defaultValue={defaultEmail}
           id="email"
           name="email"
@@ -39,14 +39,14 @@ export function AuthForm({
 
       <div className="flex flex-col gap-2">
         <Label
-          className="font-normal text-zinc-600 dark:text-zinc-400"
+          className="font-normal text-muted-foreground"
           htmlFor="password"
         >
           Password
         </Label>
 
         <Input
-          className="bg-muted text-md md:text-sm"
+          className="bg-muted text-md md:text-sm focus-visible:ring-primary"
           id="password"
           name="password"
           required

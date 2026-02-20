@@ -56,12 +56,12 @@ export function ProjectDashboard({
 
       {/* Garden Preview */}
       {gardenPlants.length > 0 && (
-        <div className="border rounded-lg p-4 bg-gradient-to-r from-green-50/50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/20">
+        <div className="border rounded-lg p-4 bg-gradient-to-r from-accent/30 to-accent/10">
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-semibold">Your Garden</h2>
             <Link
               href="/garden"
-              className="text-sm text-green-600 hover:underline"
+              className="text-sm text-primary hover:underline"
             >
               View full garden
             </Link>
@@ -70,7 +70,7 @@ export function ProjectDashboard({
             {gardenPlants.slice(0, 8).map((plant) => (
               <div
                 key={plant.id}
-                className="flex-shrink-0 w-16 h-16 rounded-lg bg-green-100 dark:bg-green-900/40 flex items-center justify-center text-2xl"
+                className="flex-shrink-0 w-16 h-16 rounded-lg bg-accent/50 flex items-center justify-center text-2xl"
               >
                 {plant.plantType === "flower"
                   ? "🌸"
@@ -96,7 +96,7 @@ export function ProjectDashboard({
       )}
 
       {/* Start New Project CTA */}
-      <div className="border-2 border-dashed border-green-300 dark:border-green-800 rounded-lg p-6 text-center">
+      <div className="border-2 border-dashed border-primary/30 rounded-lg p-6 text-center">
         <h2 className="text-lg font-semibold mb-2">
           Ready to learn something new?
         </h2>
@@ -106,7 +106,7 @@ export function ProjectDashboard({
         </p>
         <Link
           href="/onboarding"
-          className="inline-block py-2 px-6 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+          className="inline-block py-2 px-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-medium transition-colors"
         >
           Start a new project
         </Link>
