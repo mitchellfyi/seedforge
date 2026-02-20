@@ -73,7 +73,7 @@ function resetParticle(p: Particle) {
   switch (p.type) {
     case 'spark':
       p.x = randomBetween(42, 58);
-      p.y = randomBetween(64, 70);
+      p.y = randomBetween(42, 48);
       p.vx = randomBetween(-0.3, 0.3);
       p.vy = randomBetween(-2, -4);
       p.lifetime = randomBetween(3000, 5000);
