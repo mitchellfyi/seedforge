@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { auth } from "@/app/(auth)/auth";
 import { Chat } from "@/components/chat";
@@ -17,13 +18,22 @@ export default async function OnboardingPage() {
   return (
     <div className="flex flex-col h-dvh bg-background">
       {/* Header */}
-      <div className="flex items-center justify-center py-6 border-b bg-gradient-to-r from-primary/5 to-accent/20">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold">Welcome to Seedforge</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Tell me what you'd like to learn — I'll design a project just for
-            you.
-          </p>
+      <div className="flex items-center justify-center py-8 border-b bg-gradient-to-r from-primary/5 to-accent/20">
+        <div className="text-center flex flex-col items-center gap-3">
+          <Image
+            src="/brand/seed_anvil.png"
+            alt="Seedforge"
+            width={64}
+            height={64}
+          />
+          <div>
+            <h1 className="text-2xl font-bold">What do you want to make?</h1>
+            <p className="text-sm text-muted-foreground mt-1 max-w-md">
+              Your first project takes just one session. Tell me what
+              you&apos;re curious about and you&apos;ll walk away with something
+              real.
+            </p>
+          </div>
         </div>
       </div>
 
