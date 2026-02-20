@@ -65,16 +65,19 @@ export default function LandingPage() {
               icon="🌱"
               title="Project-based learning"
               description="Choose what you want to build. Seedforge creates a step-by-step path with real milestones, teaching moments, and checkpoints."
+              href="/how-it-works"
             />
             <FeatureCard
               icon="🤖"
               title="AI-powered coaching"
               description="A personal coach helps you when you're stuck, explains concepts in context, and adapts to how you learn best."
+              href="/why-seedforge"
             />
             <FeatureCard
               icon="🌿"
               title="Watch your garden grow"
               description="Every completed project plants a seed in your garden. Level up, earn GP, and build a visual record of everything you've learned."
+              href="/the-garden"
             />
           </div>
         </div>
@@ -141,10 +144,58 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="px-6 py-8 border-t border-white/5">
-        <div className="max-w-5xl mx-auto flex items-center justify-between text-foreground/30 text-sm">
-          <span>Seedforge</span>
-          <span>Forge what you learn.</span>
+      <footer className="px-6 py-12 border-t border-white/5">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <h4 className="text-sm font-semibold text-foreground/60 mb-3">
+                Product
+              </h4>
+              <div className="flex flex-col gap-2">
+                <Link
+                  href="/how-it-works"
+                  className="text-sm text-foreground/40 hover:text-foreground/70 transition-colors"
+                >
+                  How it works
+                </Link>
+                <Link
+                  href="/the-garden"
+                  className="text-sm text-foreground/40 hover:text-foreground/70 transition-colors"
+                >
+                  The Garden
+                </Link>
+                <Link
+                  href="/why-seedforge"
+                  className="text-sm text-foreground/40 hover:text-foreground/70 transition-colors"
+                >
+                  Why Seedforge
+                </Link>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold text-foreground/60 mb-3">
+                Get started
+              </h4>
+              <div className="flex flex-col gap-2">
+                <Link
+                  href="/register"
+                  className="text-sm text-foreground/40 hover:text-foreground/70 transition-colors"
+                >
+                  Sign up free
+                </Link>
+                <Link
+                  href="/login"
+                  className="text-sm text-foreground/40 hover:text-foreground/70 transition-colors"
+                >
+                  Log in
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between text-foreground/30 text-sm pt-8 border-t border-white/5">
+            <span>Seedforge</span>
+            <span>Forge what you learn.</span>
+          </div>
         </div>
       </footer>
     </div>
@@ -173,6 +224,24 @@ function NavLinks({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <div className="flex items-center gap-3">
       <Link
+        href="/how-it-works"
+        className="px-3 py-2 text-sm text-foreground/60 hover:text-foreground transition-colors hidden md:block"
+      >
+        How it works
+      </Link>
+      <Link
+        href="/the-garden"
+        className="px-3 py-2 text-sm text-foreground/60 hover:text-foreground transition-colors hidden md:block"
+      >
+        The Garden
+      </Link>
+      <Link
+        href="/why-seedforge"
+        className="px-3 py-2 text-sm text-foreground/60 hover:text-foreground transition-colors hidden md:block"
+      >
+        Why Seedforge
+      </Link>
+      <Link
         href="/login"
         className="px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
       >
@@ -192,7 +261,8 @@ function FeatureCard({
   icon,
   title,
   description,
-}: { icon: string; title: string; description: string }) {
+  href,
+}: { icon: string; title: string; description: string; href?: string }) {
   return (
     <div className="rounded-xl bg-white/5 border border-white/5 p-6 hover:bg-white/[0.07] transition-colors">
       <div className="text-3xl mb-4">{icon}</div>
@@ -200,6 +270,14 @@ function FeatureCard({
       <p className="text-sm text-foreground/50 leading-relaxed">
         {description}
       </p>
+      {href && (
+        <Link
+          href={href}
+          className="inline-block mt-4 text-sm text-[#E8A83E] hover:text-[#F5D77A] transition-colors"
+        >
+          Learn more &rarr;
+        </Link>
+      )}
     </div>
   );
 }
