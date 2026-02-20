@@ -1,6 +1,6 @@
-# Seedwork — Complete Prompt Architecture
+# Seedforge — Complete Prompt Architecture
 
-> Every AI interaction in Seedwork is powered by a prompt. This document catalogues every prompt needed, organised by phase. Each prompt is broken down to its smallest useful unit so they can be developed, tested, and iterated independently.
+> Every AI interaction in Seedforge is powered by a prompt. This document catalogues every prompt needed, organised by phase. Each prompt is broken down to its smallest useful unit so they can be developed, tested, and iterated independently.
 
 ---
 
@@ -1069,7 +1069,7 @@ These are the most frequently called prompts. They run continuously during the b
 
 These are foundational prompts that wrap or influence all other prompts.
 
-### S1 — Seedwork Coach Persona
+### S1 — Seedforge Coach Persona
 
 **Purpose:** The base system prompt that defines how the AI behaves across ALL interactions.
 

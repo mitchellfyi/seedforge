@@ -1,6 +1,6 @@
-# Seedwork — Gamification Design
+# Seedforge — Gamification Design
 
-> Seedwork's gamification is themed around **growth, cultivation, and nature**. Where Habitica turns tasks into RPG combat, Seedwork turns learning into tending a garden. You plant seeds of curiosity, nurture them through projects, and watch your garden — and your character — flourish. The metaphor is baked into every mechanic.
+> Seedforge's gamification is themed around **growth, cultivation, and nature**. Where Habitica turns tasks into RPG combat, Seedforge turns learning into tending a garden. You plant seeds of curiosity, nurture them through projects, and watch your garden — and your character — flourish. The metaphor is baked into every mechanic.
 
 ---
 
@@ -39,7 +39,7 @@
 - **Consequences for inactivity** — gentle stakes that make progress feel real
 
 ### What we do differently
-- **Learning IS the game mechanic** — in Habitica you self-report task completion (and can cheat). In Seedwork, the AI verifies learning through artifact assessment. You can't fake it.
+- **Learning IS the game mechanic** — in Habitica you self-report task completion (and can cheat). In Seedforge, the AI verifies learning through artifact assessment. You can't fake it.
 - **Artifacts ARE the rewards** — the real thing you made is the primary reward. Gamification amplifies it, never replaces it.
 - **Growth metaphor, not combat** — nurturing a garden, not killing monsters. This broadens appeal beyond gamers.
 - **Skill-weighted rewards** — harder skills and deeper learning earn more. Quality matters, not just quantity.
@@ -52,7 +52,7 @@
 
 ## Core Currencies
 
-Seedwork uses four currencies, each serving a distinct psychological purpose.
+Seedforge uses four currencies, each serving a distinct psychological purpose.
 
 ### 🌱 Growth Points (GP) — *Primary XP*
 
@@ -116,7 +116,7 @@ Seedwork uses four currencies, each serving a distinct psychological purpose.
 - A full project step completion restores +25
 - Vitality is NEVER permanently lost — there is no "death" mechanic
 
-**Design note:** Unlike Habitica's HP loss which can result in character death and gold/XP loss, Seedwork's Vitality is purely visual and emotional. You never lose progress. The wilting garden is a gentle guilt nudge, not a punishment. The moment you come back, recovery begins.
+**Design note:** Unlike Habitica's HP loss which can result in character death and gold/XP loss, Seedforge's Vitality is purely visual and emotional. You never lose progress. The wilting garden is a gentle guilt nudge, not a punishment. The moment you come back, recovery begins.
 
 ---
 
@@ -145,7 +145,7 @@ Seedwork uses four currencies, each serving a distinct psychological purpose.
 
 ### Avatar Creation
 
-On first launch, users create their **Grower** — a character avatar that represents them in Seedwork.
+On first launch, users create their **Grower** — a character avatar that represents them in Seedforge.
 
 **Customisation options:**
 - **Body type & skin tone** — inclusive range (following Habitica's approach)
@@ -452,7 +452,7 @@ Companions can be **fed** with food items (also random drops or purchasable with
 
 ## Equipment & Tools
 
-Instead of swords and armour, Seedwork has **gardening tools and accessories** that your Grower equips.
+Instead of swords and armour, Seedforge has **gardening tools and accessories** that your Grower equips.
 
 ### Tool Types
 
@@ -650,7 +650,7 @@ The in-app shop where users spend Seeds and Pollen.
 
 ### What happens when you stop
 
-Seedwork uses **visual consequences**, not mechanical punishment.
+Seedforge uses **visual consequences**, not mechanical punishment.
 
 | Inactivity Period | Visual Effect | Mechanical Effect |
 |-------------------|---------------|-------------------|
@@ -748,9 +748,9 @@ gp_for_next_level = level_curve[current_level]
 
 ## Anti-Gaming Safeguards
 
-Habitica has a known weakness: users can self-report task completion and cheat. Seedwork addresses this structurally.
+Habitica has a known weakness: users can self-report task completion and cheat. Seedforge addresses this structurally.
 
-### Why cheating is hard in Seedwork
+### Why cheating is hard in Seedforge
 
 1. **AI verifies learning.** Step completion requires passing a checkpoint assessed by the AI. You can't just click "done." The AI evaluates the artifact and asks reflective questions.
 
