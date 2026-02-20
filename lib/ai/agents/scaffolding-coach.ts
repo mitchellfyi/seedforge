@@ -1,4 +1,7 @@
-import { buildCoachingSystemPrompt } from "@/lib/ai/prompts";
+import {
+  buildCoachingSystemPrompt,
+  buildCompletionPrompt,
+} from "@/lib/ai/prompts";
 import type { Project, Step, LearnerProfile } from "@/lib/db/schema";
 
 export function buildScaffoldingCoachPrompt({
@@ -39,5 +42,27 @@ export function buildScaffoldingCoachPrompt({
     currentStreak: learnerProfile.currentStreak,
     completedStepTitles: completedSteps.map((s) => s.title),
     upcomingStepTitles: upcomingSteps.map((s) => s.title),
+  });
+}
+
+export function buildCompletionCoachPrompt({
+  project,
+  steps,
+  learnerProfile,
+}: {
+  project: Project;
+  steps: Step[];
+  learnerProfile: LearnerProfile;
+}): string {
+  const completedSteps = steps.filter((s) => s.status === "completed");
+
+  return buildCompletionPrompt({
+    projectTitle: project.title,
+    drivingQuestion: project.drivingQuestion,
+    artifactDescription: project.artifactDescription,
+    completedStepTitles: completedSteps.map((s) => s.title),
+    totalGp: learnerProfile.totalGp,
+    level: learnerProfile.level,
+    currentStreak: learnerProfile.currentStreak,
   });
 }

@@ -28,7 +28,10 @@ import { generateProject } from "@/lib/ai/tools/generate-project";
 import { advanceStep } from "@/lib/ai/tools/advance-step";
 import { insertContent } from "@/lib/ai/tools/insert-content";
 import { assessCheckpoint } from "@/lib/ai/tools/assess-checkpoint";
-import { buildScaffoldingCoachPrompt } from "@/lib/ai/agents/scaffolding-coach";
+import {
+  buildScaffoldingCoachPrompt,
+  buildCompletionCoachPrompt,
+} from "@/lib/ai/agents/scaffolding-coach";
 import { isProductionEnvironment } from "@/lib/constants";
 import {
   createStreamId,
@@ -154,6 +157,7 @@ export async function POST(request: Request) {
     const projectId = (requestBody as any).projectId as string | undefined;
     let coachingSystemPrompt: string | null = null;
     let isOnboarding = false;
+    let isCompletionMode = false;
 
     // Detect onboarding mode from the selectedChatModel or URL pattern
     const modelId = selectedChatModel;
@@ -186,6 +190,14 @@ export async function POST(request: Request) {
             learnerProfile: profile,
             documentContent: doc?.content ?? null,
           });
+        } else {
+          // All steps complete — use completion prompt
+          isCompletionMode = true;
+          coachingSystemPrompt = buildCompletionCoachPrompt({
+            project: proj,
+            steps,
+            learnerProfile: profile,
+          });
         }
       }
     }
@@ -204,21 +216,23 @@ export async function POST(request: Request) {
         : systemPrompt({ selectedChatModel, requestHints });
 
     // Determine tools based on context
-    const activeToolNames = coachingSystemPrompt
-      ? [
-          "advanceStep",
-          "insertContent",
-          "assessCheckpoint",
-          "createDocument",
-          "updateDocument",
-        ]
-      : isOnboarding
-        ? ["generateProject"]
-        : [
+    const activeToolNames = isCompletionMode
+      ? ["createDocument", "updateDocument"]
+      : coachingSystemPrompt
+        ? [
+            "advanceStep",
+            "insertContent",
+            "assessCheckpoint",
             "createDocument",
             "updateDocument",
-            "requestSuggestions",
-          ];
+          ]
+        : isOnboarding
+          ? ["generateProject"]
+          : [
+              "createDocument",
+              "updateDocument",
+              "requestSuggestions",
+            ];
 
     const modelMessages = await convertToModelMessages(uiMessages);
 
