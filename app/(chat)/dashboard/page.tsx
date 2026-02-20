@@ -22,7 +22,7 @@ export default async function DashboardPage() {
 
   // If no projects yet, redirect to onboarding
   if (projects.length === 0) {
-    redirect("/onboarding");
+    redirect("/start");
   }
 
   return (

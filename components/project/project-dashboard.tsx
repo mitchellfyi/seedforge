@@ -105,7 +105,7 @@ export function ProjectDashboard({
           you.
         </p>
         <Link
-          href="/onboarding"
+          href="/start"
           className="inline-block py-2 px-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-medium transition-colors"
         >
           Start a new project

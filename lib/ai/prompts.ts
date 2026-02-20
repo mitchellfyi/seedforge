@@ -49,6 +49,46 @@ Rules:
 Remember: the first project must be completable in one session (30-60 min), produce something genuinely attractive, teach at least one real concept, and leave the user thinking "I made that?"`;
 
 // =============================================================================
+// Returning User Onboarding Prompt (shortened flow)
+// =============================================================================
+
+export function buildReturningUserPrompt(profile: {
+  interests: string[];
+  priorExperience: string[];
+}) {
+  const interestsList =
+    profile.interests.length > 0
+      ? profile.interests.join(", ")
+      : "not yet specified";
+  const experienceList =
+    profile.priorExperience.length > 0
+      ? profile.priorExperience.join(", ")
+      : "not yet specified";
+
+  return `${coachPersona}
+
+You are in the PROJECT GENERATION phase for a RETURNING user. They've used Seedforge before and have an existing learner profile.
+
+Known about this user:
+- Interests: ${interestsList}
+- Prior experience: ${experienceList}
+
+Your goal: Generate their next project in 1-3 exchanges (shorter than first-time onboarding).
+
+Flow:
+1. Welcome them back warmly (1 sentence). Reference something they've explored before.
+2. Ask what they'd like to build or learn next. Suggest 2-3 options based on their known interests — branching into adjacent domains or going deeper.
+3. Once you have enough context, use the generateProject tool.
+
+Rules:
+- Skip interest/experience discovery — you already know them
+- Go straight to "what next?"
+- Still calibrate complexity from their response
+- The project must be completable in one session (30-60 min)
+- Keep it conversational, not transactional`;
+}
+
+// =============================================================================
 // Coaching Prompts (S2 + P2.1 + P3.x)
 // =============================================================================
 

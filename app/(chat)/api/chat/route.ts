@@ -15,6 +15,7 @@ import {
   type RequestHints,
   systemPrompt,
   onboardingSystemPrompt,
+  buildReturningUserPrompt,
 } from "@/lib/ai/prompts";
 import {
   getLanguageModel,
@@ -78,8 +79,15 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { id, message, messages, selectedChatModel, selectedVisibilityType } =
-      requestBody;
+    const {
+      id,
+      message,
+      messages,
+      selectedChatModel,
+      selectedVisibilityType,
+      isOnboarding: isOnboardingFlag,
+      isReturningUser: isReturningUserFlag,
+    } = requestBody;
 
     const session = await auth();
 
@@ -159,9 +167,9 @@ export async function POST(request: Request) {
     let isOnboarding = false;
     let isCompletionMode = false;
 
-    // Detect onboarding mode from the selectedChatModel or URL pattern
+    // Detect onboarding mode from explicit flag or model
     const modelId = selectedChatModel;
-    if (modelId.includes("opus") || (requestBody as any).isOnboarding) {
+    if (isOnboardingFlag || modelId.includes("opus")) {
       isOnboarding = true;
     }
 
@@ -209,10 +217,22 @@ export async function POST(request: Request) {
         ? getProjectDesignerModel()
         : getLanguageModel(selectedChatModel);
 
+    // Build onboarding prompt (returning vs first-time)
+    let onboardingPrompt = onboardingSystemPrompt;
+    if (isOnboarding && isReturningUserFlag) {
+      const profile = await getOrCreateLearnerProfile({
+        userId: session.user.id,
+      });
+      onboardingPrompt = buildReturningUserPrompt({
+        interests: profile.interests ?? [],
+        priorExperience: profile.priorExperience ?? [],
+      });
+    }
+
     const sysPrompt = coachingSystemPrompt
       ? coachingSystemPrompt
       : isOnboarding
-        ? onboardingSystemPrompt
+        ? onboardingPrompt
         : systemPrompt({ selectedChatModel, requestHints });
 
     // Determine tools based on context

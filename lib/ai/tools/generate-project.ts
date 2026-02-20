@@ -6,6 +6,7 @@ import {
   createSteps,
   createNeedToKnows,
   getOrCreateLearnerProfile,
+  updateLearnerProfile,
   saveDocument,
   updateProject,
 } from "@/lib/db/queries";
@@ -60,6 +61,12 @@ const projectSpecSchema = z.object({
       category: z.enum(["knowledge", "skill", "tool"]),
     }),
   ),
+  learnerProfile: z.object({
+    interests: z.array(z.string()).describe("User's learning interests extracted from conversation"),
+    priorExperience: z.array(z.string()).describe("Skills or domains the user already has experience with"),
+    preferredComplexity: z.enum(["beginner", "intermediate", "advanced"]).describe("Calibrated complexity level"),
+    initialScaffoldingLevel: z.enum(["full_guidance", "coached", "light_touch", "autonomous"]).describe("Starting scaffolding level based on experience"),
+  }).describe("Learner profile data extracted from the onboarding conversation"),
 });
 
 type GenerateProjectProps = {
@@ -137,8 +144,15 @@ export const generateProject = ({
         );
       }
 
-      // Ensure learner profile exists
+      // Ensure learner profile exists and update with extracted data
       await getOrCreateLearnerProfile({ userId });
+      await updateLearnerProfile({
+        userId,
+        interests: spec.learnerProfile.interests,
+        priorExperience: spec.learnerProfile.priorExperience,
+        preferredComplexity: spec.learnerProfile.preferredComplexity,
+        initialScaffoldingLevel: spec.learnerProfile.initialScaffoldingLevel,
+      });
 
       // Stream project spec to the UI for preview card
       (dataStream as any).write({

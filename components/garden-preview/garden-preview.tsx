@@ -9,11 +9,140 @@ import { getDemoSnapshot } from "./demo-data";
 
 const MILESTONES = [0, 25, 50, 75, 100];
 
-export function GardenPreview() {
+/**
+ * Embeddable garden demo: stats bar + garden grid + slider.
+ * No nav, no header, no CTA — designed to be embedded in other pages.
+ */
+export function GardenDemoEmbed() {
   const [progress, setProgress] = useState(0);
   const snapshot = useMemo(() => getDemoSnapshot(progress), [progress]);
   const { plants, projectTitles, stats, milestone } = snapshot;
 
+  return (
+    <div className="space-y-6">
+      {/* Stats Bar */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {/* Level */}
+        <div className="rounded-xl bg-white/5 border border-white/5 p-4 text-center">
+          <div className="text-xs text-foreground/40 mb-1">Level</div>
+          <div className="text-2xl font-bold text-[#E8A83E]">
+            {stats.level}
+          </div>
+          <div className="text-xs text-foreground/50">{stats.levelTitle}</div>
+        </div>
+
+        {/* GP */}
+        <div className="rounded-xl bg-white/5 border border-white/5 p-4 text-center">
+          <div className="text-xs text-foreground/40 mb-1">Growth Points</div>
+          <div className="text-2xl font-bold text-[#E8A83E]">
+            {stats.totalGp.toLocaleString()}
+          </div>
+          <div className="mt-2 h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <motion.div
+              className="h-full rounded-full bg-[#E8A83E]"
+              initial={false}
+              animate={{ width: `${stats.gpProgress.percentage}%` }}
+              transition={{ type: "spring", stiffness: 120, damping: 20 }}
+            />
+          </div>
+          <div className="text-[10px] text-foreground/30 mt-1">
+            {stats.gpProgress.current} / {stats.gpProgress.needed} to next level
+          </div>
+        </div>
+
+        {/* Streak */}
+        <div className="rounded-xl bg-white/5 border border-white/5 p-4 text-center">
+          <div className="text-xs text-foreground/40 mb-1">Streak</div>
+          <div className="text-2xl font-bold text-[#4CAF50]">
+            {stats.currentStreak}
+          </div>
+          <div className="text-xs text-foreground/50">days</div>
+        </div>
+
+        {/* Projects */}
+        <div className="rounded-xl bg-white/5 border border-white/5 p-4 text-center">
+          <div className="text-xs text-foreground/40 mb-1">Projects</div>
+          <div className="text-2xl font-bold text-foreground">
+            {stats.completedProjects}
+          </div>
+          <div className="text-xs text-foreground/50">completed</div>
+        </div>
+      </div>
+
+      {/* Garden Grid */}
+      <div className="rounded-2xl bg-gradient-to-b from-[#1E3A2F]/60 to-[#1A2E1A]/80 border border-white/5 p-6 min-h-[320px]">
+        {plants.length === 0 ? (
+          <div className="flex items-center justify-center h-[280px] text-foreground/30 text-sm">
+            Drag the slider to plant your first seeds...
+          </div>
+        ) : (
+          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1">
+            <AnimatePresence mode="popLayout">
+              {plants.map((plant) => (
+                <motion.div
+                  key={plant.id}
+                  layout
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 20,
+                  }}
+                >
+                  <PlantComponent
+                    plant={plant}
+                    projectTitle={projectTitles.get(plant.projectId)}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
+      </div>
+
+      {/* Slider */}
+      <div>
+        <div className="relative pt-4 pb-2">
+          {/* Milestone dots */}
+          <div className="absolute top-0 left-0 right-0 flex justify-between px-[6px] pointer-events-none">
+            {MILESTONES.map((m) => (
+              <div
+                key={m}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  progress >= m ? "bg-[#E8A83E]" : "bg-white/20"
+                }`}
+              />
+            ))}
+          </div>
+
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={progress}
+            onChange={(e) => setProgress(Number(e.target.value))}
+            className="w-full h-2 rounded-full appearance-none cursor-pointer bg-white/10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#E8A83E] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:shadow-[#E8A83E]/30 [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#E8A83E] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
+          />
+        </div>
+
+        <div className="text-center">
+          <p className="text-sm text-[#E8A83E] font-medium">{milestone}</p>
+          <p className="text-xs text-foreground/30 mt-1">
+            Drag to simulate your learning journey
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Full-page garden preview (used as a standalone page).
+ * Wraps GardenDemoEmbed with nav, header, and CTA.
+ */
+export function GardenPreview() {
   return (
     <div className="min-h-dvh bg-[#1A1A2E] text-white">
       {/* Nav */}
@@ -56,126 +185,10 @@ export function GardenPreview() {
         </div>
       </section>
 
-      {/* Stats Bar */}
-      <section className="px-6 pb-6">
-        <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3">
-          {/* Level */}
-          <div className="rounded-xl bg-white/5 border border-white/5 p-4 text-center">
-            <div className="text-xs text-foreground/40 mb-1">Level</div>
-            <div className="text-2xl font-bold text-[#E8A83E]">
-              {stats.level}
-            </div>
-            <div className="text-xs text-foreground/50">{stats.levelTitle}</div>
-          </div>
-
-          {/* GP */}
-          <div className="rounded-xl bg-white/5 border border-white/5 p-4 text-center">
-            <div className="text-xs text-foreground/40 mb-1">Growth Points</div>
-            <div className="text-2xl font-bold text-[#E8A83E]">
-              {stats.totalGp.toLocaleString()}
-            </div>
-            <div className="mt-2 h-1.5 rounded-full bg-white/10 overflow-hidden">
-              <motion.div
-                className="h-full rounded-full bg-[#E8A83E]"
-                initial={false}
-                animate={{ width: `${stats.gpProgress.percentage}%` }}
-                transition={{ type: "spring", stiffness: 120, damping: 20 }}
-              />
-            </div>
-            <div className="text-[10px] text-foreground/30 mt-1">
-              {stats.gpProgress.current} / {stats.gpProgress.needed} to next level
-            </div>
-          </div>
-
-          {/* Streak */}
-          <div className="rounded-xl bg-white/5 border border-white/5 p-4 text-center">
-            <div className="text-xs text-foreground/40 mb-1">Streak</div>
-            <div className="text-2xl font-bold text-[#4CAF50]">
-              {stats.currentStreak}
-            </div>
-            <div className="text-xs text-foreground/50">days</div>
-          </div>
-
-          {/* Projects */}
-          <div className="rounded-xl bg-white/5 border border-white/5 p-4 text-center">
-            <div className="text-xs text-foreground/40 mb-1">Projects</div>
-            <div className="text-2xl font-bold text-foreground">
-              {stats.completedProjects}
-            </div>
-            <div className="text-xs text-foreground/50">completed</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Garden Grid */}
+      {/* Demo */}
       <section className="px-6 pb-6">
         <div className="max-w-4xl mx-auto">
-          <div className="rounded-2xl bg-gradient-to-b from-[#1E3A2F]/60 to-[#1A2E1A]/80 border border-white/5 p-6 min-h-[320px]">
-            {plants.length === 0 ? (
-              <div className="flex items-center justify-center h-[280px] text-foreground/30 text-sm">
-                Drag the slider to plant your first seeds...
-              </div>
-            ) : (
-              <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1">
-                <AnimatePresence mode="popLayout">
-                  {plants.map((plant) => (
-                    <motion.div
-                      key={plant.id}
-                      layout
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 20,
-                      }}
-                    >
-                      <PlantComponent
-                        plant={plant}
-                        projectTitle={projectTitles.get(plant.projectId)}
-                      />
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Slider */}
-      <section className="px-6 pb-12">
-        <div className="max-w-4xl mx-auto">
-          <div className="relative pt-4 pb-2">
-            {/* Milestone dots */}
-            <div className="absolute top-0 left-0 right-0 flex justify-between px-[6px] pointer-events-none">
-              {MILESTONES.map((m) => (
-                <div
-                  key={m}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    progress >= m ? "bg-[#E8A83E]" : "bg-white/20"
-                  }`}
-                />
-              ))}
-            </div>
-
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={progress}
-              onChange={(e) => setProgress(Number(e.target.value))}
-              className="w-full h-2 rounded-full appearance-none cursor-pointer bg-white/10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#E8A83E] [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:shadow-[#E8A83E]/30 [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#E8A83E] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
-            />
-          </div>
-
-          <div className="text-center">
-            <p className="text-sm text-[#E8A83E] font-medium">{milestone}</p>
-            <p className="text-xs text-foreground/30 mt-1">
-              Drag to simulate your learning journey
-            </p>
-          </div>
+          <GardenDemoEmbed />
         </div>
       </section>
 
