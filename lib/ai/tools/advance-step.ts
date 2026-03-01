@@ -3,19 +3,23 @@ import type { Session } from "next-auth";
 import { z } from "zod";
 import {
   createGardenPlant,
+  getGardenPlantByProjectId,
   getLearnerProfile,
   getProjectById,
   getStepById,
   getStepsByProjectId,
+  updateGardenPlant,
   updateLearnerProfile,
   updateProject,
   updateStep,
 } from "@/lib/db/queries";
 import {
+  calculateSeedsFromGp,
   calculateStepGp,
   calculateStreakUpdate,
   DAILY_ACTIVITY_BONUS,
   getLevelFromGp,
+  getPlantDomain,
   getPlantType,
   getProjectCompletionBonus,
 } from "@/lib/gamification/gp";
@@ -98,12 +102,14 @@ export const advanceStep = ({ session, dataStream }: AdvanceStepProps) =>
 
       const newTotalGp = profile.totalGp + totalGpToAdd;
       const newLevel = getLevelFromGp(newTotalGp);
-      const leveledUp = newLevel > profile.level;
+      const _leveledUp = newLevel > profile.level;
+      const seedsEarned = calculateSeedsFromGp(totalGpToAdd);
 
       await updateLearnerProfile({
         userId,
         totalGp: newTotalGp,
         level: newLevel,
+        totalSeeds: (profile.totalSeeds ?? 0) + seedsEarned,
         currentStreak: streakUpdate.newStreak,
         longestStreak: streakUpdate.newLongest,
         lastActiveDate: new Date().toISOString().split("T")[0],
@@ -118,14 +124,45 @@ export const advanceStep = ({ session, dataStream }: AdvanceStepProps) =>
         });
       }
 
-      // Check if project is complete (no more steps)
+      // Plant growth stage management
       const isProjectComplete = !nextStep;
+      const domain = proj ? getPlantDomain(proj.learningIntent) : "general";
+      const plantType = proj ? getPlantType(proj.estimatedMinutes) : "flower";
+
+      if (proj) {
+        const existingPlant = await getGardenPlantByProjectId({
+          projectId: proj.id,
+        });
+
+        if (currentStep.orderIndex === 0 && !existingPlant) {
+          // First step completed — plant a seed
+          await createGardenPlant({
+            userId,
+            projectId: proj.id,
+            plantType,
+            domain,
+          });
+        } else if (existingPlant && !isProjectComplete) {
+          // Mid-project — transition to growing once 50% of steps are done
+          const completedCount = allSteps.filter(
+            (s) => s.status === "completed" || s.id === stepId
+          ).length;
+          const halfwayDone = completedCount >= Math.ceil(allSteps.length / 2);
+          if (halfwayDone && existingPlant.growthStage === "planted") {
+            await updateGardenPlant({
+              id: existingPlant.id,
+              growthStage: "growing",
+            });
+          }
+        }
+      }
 
       if (isProjectComplete && proj) {
         // Award completion bonus
         const completionBonus = getProjectCompletionBonus(
           proj.gpEarned + totalGpToAdd
         );
+        const completionSeeds = calculateSeedsFromGp(completionBonus);
         const finalTotalGp = newTotalGp + completionBonus;
         const finalLevel = getLevelFromGp(finalTotalGp);
 
@@ -133,6 +170,7 @@ export const advanceStep = ({ session, dataStream }: AdvanceStepProps) =>
           userId,
           totalGp: finalTotalGp,
           level: finalLevel,
+          totalSeeds: (profile.totalSeeds ?? 0) + seedsEarned + completionSeeds,
           completedProjectCount: profile.completedProjectCount + 1,
         });
 
@@ -143,14 +181,24 @@ export const advanceStep = ({ session, dataStream }: AdvanceStepProps) =>
           completedAt: new Date(),
         });
 
-        // Plant in garden
-        const plantType = getPlantType(proj.estimatedMinutes);
-        await createGardenPlant({
-          userId,
+        // Bring plant to full bloom on project completion
+        const completedPlant = await getGardenPlantByProjectId({
           projectId: proj.id,
-          plantType,
-          domain: "general", // Could be derived from project metadata
         });
+        if (completedPlant) {
+          await updateGardenPlant({
+            id: completedPlant.id,
+            growthStage: "blooming",
+          });
+        } else {
+          await createGardenPlant({
+            userId,
+            projectId: proj.id,
+            plantType,
+            domain,
+            growthStage: "blooming",
+          });
+        }
 
         (dataStream as any).write({
           type: "data-project-complete",
@@ -176,27 +224,22 @@ export const advanceStep = ({ session, dataStream }: AdvanceStepProps) =>
         },
       });
 
-      // Stream GP update
+      // For the stream, report the final GP/level after any completion bonus
+      const finalStreamGp =
+        isProjectComplete && proj
+          ? newTotalGp + getProjectCompletionBonus(proj.gpEarned + totalGpToAdd)
+          : newTotalGp;
+      const finalStreamLevel = getLevelFromGp(finalStreamGp);
+      const finalLeveledUp = finalStreamLevel > profile.level;
+
       (dataStream as any).write({
         type: "data-gp-awarded",
         data: {
           amount: totalGpToAdd,
           reason: `Completed: ${currentStep.title}`,
-          newTotal: isProjectComplete
-            ? newTotalGp +
-              (proj
-                ? getProjectCompletionBonus(proj.gpEarned + totalGpToAdd)
-                : 0)
-            : newTotalGp,
-          newLevel: isProjectComplete
-            ? getLevelFromGp(
-                newTotalGp +
-                  (proj
-                    ? getProjectCompletionBonus(proj.gpEarned + totalGpToAdd)
-                    : 0)
-              )
-            : newLevel,
-          leveledUp,
+          newTotal: finalStreamGp,
+          newLevel: finalStreamLevel,
+          leveledUp: finalLeveledUp,
         },
       });
 
@@ -204,8 +247,8 @@ export const advanceStep = ({ session, dataStream }: AdvanceStepProps) =>
         gpAwarded: totalGpToAdd,
         newStepId,
         isProjectComplete,
-        leveledUp,
-        newLevel,
+        leveledUp: finalLeveledUp,
+        newLevel: finalStreamLevel,
         feedback,
       };
     },

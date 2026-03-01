@@ -857,6 +857,8 @@ export async function updateLearnerProfile({
   avatarPreset?: string;
   totalGp?: number;
   level?: number;
+  totalSeeds?: number;
+  vitality?: number;
   currentStreak?: number;
   longestStreak?: number;
   lastActiveDate?: string;
@@ -886,15 +888,17 @@ export async function createGardenPlant(data: {
   projectId: string;
   plantType: string;
   domain?: string;
+  growthStage?: string;
   positionX?: number;
   positionY?: number;
 }) {
   try {
+    const { growthStage = "planted", ...rest } = data;
     const [created] = await db
       .insert(gardenPlant)
       .values({
-        ...data,
-        growthStage: "planted",
+        ...rest,
+        growthStage,
         createdAt: new Date(),
       })
       .returning();
@@ -903,6 +907,25 @@ export async function createGardenPlant(data: {
     throw new ChatSDKError(
       "bad_request:database",
       "Failed to create garden plant"
+    );
+  }
+}
+
+export async function getGardenPlantByProjectId({
+  projectId,
+}: {
+  projectId: string;
+}) {
+  try {
+    const [found] = await db
+      .select()
+      .from(gardenPlant)
+      .where(eq(gardenPlant.projectId, projectId));
+    return found ?? null;
+  } catch (_error) {
+    throw new ChatSDKError(
+      "bad_request:database",
+      "Failed to get garden plant by project id"
     );
   }
 }

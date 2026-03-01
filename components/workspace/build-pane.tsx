@@ -5,6 +5,7 @@ import { TipTapEditor } from "@/components/tiptap/tiptap-editor";
 interface BuildPaneProps {
   content: string;
   onContentChange: (html: string) => void;
+  onEditorReady?: (insertFn: (html: string) => void) => void;
   projectTitle: string;
   currentStepTitle: string;
 }
@@ -12,6 +13,7 @@ interface BuildPaneProps {
 export function BuildPane({
   content,
   onContentChange,
+  onEditorReady,
   projectTitle,
   currentStepTitle,
 }: BuildPaneProps) {
@@ -35,6 +37,7 @@ export function BuildPane({
         <TipTapEditor
           className="border-0 rounded-none h-full"
           content={content}
+          onEditorReady={onEditorReady}
           onUpdate={onContentChange}
           placeholder="Start building your artifact here. The coach in the right panel will guide you through each step..."
         />

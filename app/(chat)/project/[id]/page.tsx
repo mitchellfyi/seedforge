@@ -3,6 +3,7 @@ import { auth } from "@/app/(auth)/auth";
 import { WorkspaceLayout } from "@/components/workspace/workspace-layout";
 import {
   getDocumentById,
+  getNeedToKnowsByProjectId,
   getOrCreateLearnerProfile,
   getProjectById,
   getStepsByProjectId,
@@ -30,10 +31,11 @@ export default async function ProjectPage({
     notFound();
   }
 
-  const [steps, learnerProfile, document] = await Promise.all([
+  const [steps, learnerProfile, document, needToKnows] = await Promise.all([
     getStepsByProjectId({ projectId: id }),
     getOrCreateLearnerProfile({ userId: session.user.id }),
     project.documentId ? getDocumentById({ id: project.documentId }) : null,
+    getNeedToKnowsByProjectId({ projectId: id }),
   ]);
 
   const coachChatId = project.coachChatId ?? id;
@@ -44,6 +46,7 @@ export default async function ProjectPage({
       coachChatId={coachChatId}
       initialContent={initialContent}
       learnerProfile={learnerProfile}
+      needToKnows={needToKnows}
       project={project}
       steps={steps}
     />

@@ -1,7 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import type { LearnerProfile, Project, Step } from "@/lib/db/schema";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { GpAnimation } from "@/components/gamification/gp-animation";
+import { LevelUp } from "@/components/gamification/level-up";
+import type {
+  LearnerProfile,
+  NeedToKnow,
+  Project,
+  Step,
+} from "@/lib/db/schema";
+import { onSeedforgeStreamEvent } from "../data-stream-handler";
 import { BuildPane } from "./build-pane";
 import { GpBar } from "./gp-bar";
 import { LearnPane } from "./learn-pane";
@@ -11,6 +19,7 @@ interface WorkspaceLayoutProps {
   project: Project;
   steps: Step[];
   learnerProfile: LearnerProfile;
+  needToKnows: NeedToKnow[];
   initialContent: string;
   coachChatId: string;
 }
@@ -19,13 +28,28 @@ export function WorkspaceLayout({
   project,
   steps,
   learnerProfile,
+  needToKnows,
   initialContent,
   coachChatId,
 }: WorkspaceLayoutProps) {
   const [content, setContent] = useState(initialContent);
   const [currentStepId, setCurrentStepId] = useState<string | null>(null);
-  const [localSteps, _setLocalSteps] = useState(steps);
-  const [localProfile, _setLocalProfile] = useState(learnerProfile);
+  const [localSteps, setLocalSteps] = useState(steps);
+  const [localProfile, setLocalProfile] = useState(learnerProfile);
+
+  // Gamification animation state
+  const [gpAnimation, setGpAnimation] = useState<{
+    show: boolean;
+    amount: number;
+    reason: string;
+  }>({ show: false, amount: 0, reason: "" });
+  const [levelUp, setLevelUp] = useState<{ show: boolean; newLevel: number }>({
+    show: false,
+    newLevel: 1,
+  });
+
+  // Ref to the TipTap insert function, populated when editor is ready
+  const insertHtmlRef = useRef<((html: string) => void) | null>(null);
 
   // Set initial current step (first available/in_progress step)
   useEffect(() => {
@@ -39,11 +63,53 @@ export function WorkspaceLayout({
 
   const currentStep = localSteps.find((s) => s.id === currentStepId);
 
-  // Auto-save content
+  // Subscribe to Seedforge stream events from the AI coach
+  useEffect(() => {
+    const unsubscribe = onSeedforgeStreamEvent((event) => {
+      if (event.type === "data-step-advance") {
+        const { completedStepId, newStepId } = event.data;
+        setLocalSteps((prev) =>
+          prev.map((s) => {
+            if (s.id === completedStepId) {
+              return { ...s, status: "completed" as const };
+            }
+            if (s.id === newStepId) {
+              return { ...s, status: "available" as const };
+            }
+            return s;
+          })
+        );
+        if (newStepId) {
+          setCurrentStepId(newStepId);
+        }
+      }
+
+      if (event.type === "data-gp-awarded") {
+        const { amount, reason, newTotal, newLevel, leveledUp } = event.data;
+        setLocalProfile((prev) => ({
+          ...prev,
+          totalGp: newTotal,
+          level: newLevel,
+        }));
+        setGpAnimation({ show: true, amount, reason });
+        if (leveledUp) {
+          setLevelUp({ show: true, newLevel });
+        }
+      }
+
+      if (event.type === "data-insert-content") {
+        insertHtmlRef.current?.(event.data.html);
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  // Auto-save content with debounce
   const handleContentChange = useCallback(
     async (html: string) => {
       setContent(html);
-      // Debounced save to document API
       try {
         await fetch("/api/document", {
           method: "POST",
@@ -56,7 +122,7 @@ export function WorkspaceLayout({
           }),
         });
       } catch {
-        // Silently handle save errors for now
+        // Silently handle save errors — content is already tracked in state
       }
     },
     [project.documentId, project.title]
@@ -64,6 +130,10 @@ export function WorkspaceLayout({
 
   const handleStepClick = useCallback((stepId: string) => {
     setCurrentStepId(stepId);
+  }, []);
+
+  const handleEditorReady = useCallback((insertFn: (html: string) => void) => {
+    insertHtmlRef.current = insertFn;
   }, []);
 
   return (
@@ -81,6 +151,7 @@ export function WorkspaceLayout({
         {/* Left: Progress Rail */}
         <ProgressRail
           currentStepId={currentStepId}
+          needToKnows={needToKnows}
           onStepClick={handleStepClick}
           steps={localSteps}
         />
@@ -90,12 +161,28 @@ export function WorkspaceLayout({
           content={content}
           currentStepTitle={currentStep?.title ?? "Getting started"}
           onContentChange={handleContentChange}
+          onEditorReady={handleEditorReady}
           projectTitle={project.title}
         />
 
         {/* Right: Learn Pane (Coach) */}
         <LearnPane chatId={coachChatId} />
       </div>
+
+      {/* GP award popup */}
+      <GpAnimation
+        amount={gpAnimation.amount}
+        onDone={() => setGpAnimation((prev) => ({ ...prev, show: false }))}
+        reason={gpAnimation.reason}
+        show={gpAnimation.show}
+      />
+
+      {/* Level-up full-screen celebration */}
+      <LevelUp
+        newLevel={levelUp.newLevel}
+        onDone={() => setLevelUp((prev) => ({ ...prev, show: false }))}
+        show={levelUp.show}
+      />
     </div>
   );
 }

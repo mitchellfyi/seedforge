@@ -277,6 +277,8 @@ export const learnerProfile = pgTable("LearnerProfile", {
   avatarPreset: varchar("avatarPreset", { length: 50 }).default("grower-1"),
   totalGp: integer("totalGp").notNull().default(0),
   level: integer("level").notNull().default(1),
+  totalSeeds: integer("totalSeeds").notNull().default(0),
+  vitality: integer("vitality").notNull().default(100),
   currentStreak: integer("currentStreak").notNull().default(0),
   longestStreak: integer("longestStreak").notNull().default(0),
   lastActiveDate: date("lastActiveDate"),

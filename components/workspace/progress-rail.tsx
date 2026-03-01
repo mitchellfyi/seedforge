@@ -1,19 +1,24 @@
 "use client";
 
-import { motion } from "framer-motion";
-import type { Step } from "@/lib/db/schema";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import type { NeedToKnow, Step } from "@/lib/db/schema";
 
 interface ProgressRailProps {
   steps: Step[];
   currentStepId: string | null;
   onStepClick: (stepId: string) => void;
+  needToKnows?: NeedToKnow[];
 }
 
 export function ProgressRail({
   steps,
   currentStepId,
   onStepClick,
+  needToKnows = [],
 }: ProgressRailProps) {
+  const [showNeedToKnow, setShowNeedToKnow] = useState(false);
+
   return (
     <div className="flex flex-col h-full w-[240px] border-r bg-muted/10 overflow-y-auto">
       <div className="p-4 border-b">
@@ -102,14 +107,50 @@ export function ProgressRail({
         })}
       </div>
 
-      {/* Need to Know link */}
-      <div className="p-3 border-t">
+      {/* Need to Know panel */}
+      <div className="border-t">
         <button
-          className="w-full text-left p-2 rounded-lg text-sm text-muted-foreground hover:bg-muted/50 transition-colors"
+          className="w-full text-left p-3 text-sm text-muted-foreground hover:bg-muted/50 transition-colors flex items-center justify-between"
+          onClick={() => setShowNeedToKnow((v) => !v)}
           type="button"
         >
-          📚 Need to Know
+          <span>📚 Need to Know</span>
+          <span className="text-xs">{showNeedToKnow ? "▲" : "▼"}</span>
         </button>
+        <AnimatePresence>
+          {showNeedToKnow && (
+            <motion.div
+              animate={{ height: "auto", opacity: 1 }}
+              className="overflow-hidden px-3 pb-3 space-y-2"
+              exit={{ height: 0, opacity: 0 }}
+              initial={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {needToKnows.length === 0 ? (
+                <p className="text-xs text-muted-foreground italic">
+                  No items yet — they'll appear as your project generates.
+                </p>
+              ) : (
+                needToKnows.map((ntk) => (
+                  <div
+                    className="text-xs rounded-md p-2 bg-muted/40 border border-border"
+                    key={ntk.id}
+                  >
+                    <p className="font-medium text-foreground">{ntk.title}</p>
+                    <p className="text-muted-foreground mt-0.5">
+                      {ntk.description}
+                    </p>
+                    {ntk.category && (
+                      <span className="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] bg-primary/10 text-primary">
+                        {ntk.category}
+                      </span>
+                    )}
+                  </div>
+                ))
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

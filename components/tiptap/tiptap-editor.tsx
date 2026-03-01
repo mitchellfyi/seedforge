@@ -11,6 +11,8 @@ import { useCallback, useEffect, useRef } from "react";
 interface TipTapEditorProps {
   content: string;
   onUpdate: (html: string) => void;
+  /** Called once the editor is ready, providing a stable insert-at-cursor function. */
+  onEditorReady?: (insertFn: (html: string) => void) => void;
   placeholder?: string;
   editable?: boolean;
   className?: string;
@@ -19,6 +21,7 @@ interface TipTapEditorProps {
 export function TipTapEditor({
   content,
   onUpdate,
+  onEditorReady,
   placeholder = "Start writing your artifact here...",
   editable = true,
   className = "",
@@ -69,12 +72,12 @@ export function TipTapEditor({
     [editor]
   );
 
-  // Expose insert function via ref pattern
+  // Expose insert function to parent via callback once editor is ready
   useEffect(() => {
-    if (editor) {
-      (editor as any).__seedforgeInsert = insertHtmlAtCursor;
+    if (editor && onEditorReady) {
+      onEditorReady(insertHtmlAtCursor);
     }
-  }, [editor, insertHtmlAtCursor]);
+  }, [editor, onEditorReady, insertHtmlAtCursor]);
 
   return (
     <div
