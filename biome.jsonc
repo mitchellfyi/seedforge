@@ -9,6 +9,11 @@
     "indentStyle": "space",
     "indentWidth": 2
   },
+  "css": {
+    "parser": {
+      "cssModules": true
+    }
+  },
   "files": {
     "includes": [
       "**/*.ts",

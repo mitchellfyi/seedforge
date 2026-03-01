@@ -191,11 +191,11 @@ function getScaffoldingInstruction(level: string): string {
     case "coached":
       return `Use prompt-based guidance: "What do you think the next step is?" Provide hints on request. Give feedback on attempts. The user has seen this concept before.`;
     case "light_touch":
-      return `Offer occasional tips, alternative suggestions, and stretch challenges. Intervene only on significant errors. The user is developing fluency.`;
+      return "Offer occasional tips, alternative suggestions, and stretch challenges. Intervene only on significant errors. The user is developing fluency.";
     case "autonomous":
-      return `No proactive scaffolding. The user works independently. Monitor for unexpected struggles and re-engage only if needed.`;
+      return "No proactive scaffolding. The user works independently. Monitor for unexpected struggles and re-engage only if needed.";
     default:
-      return `Adapt your scaffolding based on how the user is responding. If they seem confident, step back. If they seem stuck, step forward.`;
+      return "Adapt your scaffolding based on how the user is responding. If they seem confident, step back. If they seem stuck, step forward.";
   }
 }
 
@@ -294,7 +294,7 @@ About the origin of user's request:
 `;
 
 export const systemPrompt = ({
-  selectedChatModel,
+  selectedChatModel: _selectedChatModel,
   requestHints,
 }: {
   selectedChatModel: string;
@@ -306,7 +306,7 @@ export const systemPrompt = ({
 
 export const updateDocumentPrompt = (
   currentContent: string | null,
-  type: ArtifactKind,
+  _type: ArtifactKind
 ) => {
   return `${coachPersona}
 
@@ -316,9 +316,11 @@ ${currentContent}`;
 };
 
 // Legacy prompts kept for compatibility with Chat SDK artifact system
-export const codePrompt = `You are a code generator. Write clean, well-commented code.`;
+export const codePrompt =
+  "You are a code generator. Write clean, well-commented code.";
 
-export const sheetPrompt = `You are a spreadsheet creation assistant. Create spreadsheets in CSV format.`;
+export const sheetPrompt =
+  "You are a spreadsheet creation assistant. Create spreadsheets in CSV format.";
 
 export const titlePrompt = `Generate a short project title (2-5 words) summarizing the user's learning intent.
 

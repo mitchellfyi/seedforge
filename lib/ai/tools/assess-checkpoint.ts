@@ -26,7 +26,7 @@ export const assessCheckpoint = ({ dataStream }: AssessCheckpointProps) =>
         .string()
         .describe("Warm, specific feedback for the user"),
     }),
-    execute: async ({
+    execute: ({
       stepId,
       passed,
       strengths,

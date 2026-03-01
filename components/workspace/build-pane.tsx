@@ -33,10 +33,10 @@ export function BuildPane({
       {/* Editor */}
       <div className="flex-1 overflow-y-auto">
         <TipTapEditor
+          className="border-0 rounded-none h-full"
           content={content}
           onUpdate={onContentChange}
           placeholder="Start building your artifact here. The coach in the right panel will guide you through each step..."
-          className="border-0 rounded-none h-full"
         />
       </div>
     </div>

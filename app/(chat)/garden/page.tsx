@@ -1,11 +1,11 @@
-import { redirect } from "next/navigation";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { auth } from "@/app/(auth)/auth";
 import { GardenGrid } from "@/components/garden/garden-grid";
 import {
   getGardenPlantsByUserId,
-  getProjectsByUserId,
   getOrCreateLearnerProfile,
+  getProjectsByUserId,
 } from "@/lib/db/queries";
 import { getLevelTitle } from "@/lib/gamification/gp";
 
@@ -34,8 +34,8 @@ export default async function GardenPage() {
           </p>
         </div>
         <Link
-          href="/"
           className="text-sm text-muted-foreground hover:text-foreground"
+          href="/"
         >
           Back to dashboard
         </Link>

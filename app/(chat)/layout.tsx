@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { DataStreamProvider } from "@/components/data-stream-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { auth } from "../(auth)/auth";
 import { getProjectsByUserId } from "@/lib/db/queries";
+import { auth } from "../(auth)/auth";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -30,7 +30,7 @@ async function SidebarWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider defaultOpen={!isCollapsed}>
-      <AppSidebar user={session?.user} activeProjects={activeProjects} />
+      <AppSidebar activeProjects={activeProjects} user={session?.user} />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );

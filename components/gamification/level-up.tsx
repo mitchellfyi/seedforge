@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
 import { getLevelTitle } from "@/lib/gamification/gp";
 
@@ -26,27 +26,27 @@ export function LevelUp({ newLevel, show, onDone }: LevelUpProps) {
     <AnimatePresence>
       {show && (
         <motion.div
-          initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
           exit={{ opacity: 0, scale: 0 }}
+          initial={{ opacity: 0, scale: 0 }}
+          onClick={onDone}
           transition={{
             type: "spring",
             stiffness: 200,
             damping: 15,
           }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
-          onClick={onDone}
         >
           <motion.div
-            initial={{ y: 50 }}
             animate={{ y: 0 }}
             className="bg-card border rounded-2xl p-8 shadow-2xl text-center max-w-sm"
+            initial={{ y: 50 }}
           >
             <motion.div
-              initial={{ rotate: 0, scale: 0 }}
               animate={{ rotate: 360, scale: 1 }}
-              transition={{ delay: 0.2, type: "spring" }}
               className="text-6xl mb-4"
+              initial={{ rotate: 0, scale: 0 }}
+              transition={{ delay: 0.2, type: "spring" }}
             >
               🌟
             </motion.div>

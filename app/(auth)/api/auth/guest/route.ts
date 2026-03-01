@@ -1,17 +1,25 @@
 import { NextResponse } from "next/server";
-import { getToken, encode } from "next-auth/jwt";
-import { createGuestUser } from "@/lib/db/queries";
+import { encode, getToken } from "next-auth/jwt";
 import { isDevelopmentEnvironment } from "@/lib/constants";
+import { createGuestUser } from "@/lib/db/queries";
 
 const SESSION_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const redirectUrl = searchParams.get("redirectUrl") || "/dashboard";
+  const authSecret = process.env.AUTH_SECRET;
+
+  if (!authSecret) {
+    return NextResponse.json(
+      { error: "Authentication is not configured." },
+      { status: 500 }
+    );
+  }
 
   const token = await getToken({
     req: request,
-    secret: process.env.AUTH_SECRET,
+    secret: authSecret,
     secureCookie: !isDevelopmentEnvironment,
   });
 
@@ -32,7 +40,7 @@ export async function GET(request: Request) {
       id: guestUser.id,
       type: "guest",
     },
-    secret: process.env.AUTH_SECRET!,
+    secret: authSecret,
     salt: cookieName,
     maxAge: SESSION_MAX_AGE,
   });

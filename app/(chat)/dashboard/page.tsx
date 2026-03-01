@@ -2,9 +2,9 @@ import { redirect } from "next/navigation";
 import { auth } from "@/app/(auth)/auth";
 import { ProjectDashboard } from "@/components/project/project-dashboard";
 import {
-  getProjectsByUserId,
-  getOrCreateLearnerProfile,
   getGardenPlantsByUserId,
+  getOrCreateLearnerProfile,
+  getProjectsByUserId,
 } from "@/lib/db/queries";
 
 export default async function DashboardPage() {
@@ -27,9 +27,9 @@ export default async function DashboardPage() {
 
   return (
     <ProjectDashboard
-      projects={projects}
-      learnerProfile={learnerProfile}
       gardenPlants={gardenPlants}
+      learnerProfile={learnerProfile}
+      projects={projects}
     />
   );
 }

@@ -1,11 +1,8 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
-import {
-  getLevelTitle,
-  getGpProgressInLevel,
-} from "@/lib/gamification/gp";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { getGpProgressInLevel, getLevelTitle } from "@/lib/gamification/gp";
 
 interface GpBarProps {
   totalGp: number;
@@ -22,7 +19,7 @@ export function GpBar({
 }: GpBarProps) {
   const progress = getGpProgressInLevel(totalGp, level);
   const title = getLevelTitle(level);
-  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [showLevelUp, _setShowLevelUp] = useState(false);
   const [displayedGp, setDisplayedGp] = useState(totalGp);
 
   // Animate GP counter
@@ -72,9 +69,9 @@ export function GpBar({
         </div>
         <div className="h-2 bg-muted rounded-full overflow-hidden">
           <motion.div
+            animate={{ width: `${progress.percentage}%` }}
             className="h-full bg-green-500 rounded-full"
             initial={{ width: 0 }}
-            animate={{ width: `${progress.percentage}%` }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           />
         </div>
@@ -92,10 +89,10 @@ export function GpBar({
       <AnimatePresence>
         {showLevelUp && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.5, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.5, y: -20 }}
             className="absolute top-12 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium"
+            exit={{ opacity: 0, scale: 0.5, y: -20 }}
+            initial={{ opacity: 0, scale: 0.5, y: 20 }}
           >
             Level Up! You're now a Lvl {level} {title}!
           </motion.div>

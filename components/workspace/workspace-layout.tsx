@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { GpBar } from "./gp-bar";
-import { ProgressRail } from "./progress-rail";
+import { useCallback, useEffect, useState } from "react";
+import type { LearnerProfile, Project, Step } from "@/lib/db/schema";
 import { BuildPane } from "./build-pane";
+import { GpBar } from "./gp-bar";
 import { LearnPane } from "./learn-pane";
-import type { Project, Step, LearnerProfile } from "@/lib/db/schema";
-import { COACHING_MODEL } from "@/lib/ai/models";
+import { ProgressRail } from "./progress-rail";
 
 interface WorkspaceLayoutProps {
   project: Project;
@@ -25,8 +24,8 @@ export function WorkspaceLayout({
 }: WorkspaceLayoutProps) {
   const [content, setContent] = useState(initialContent);
   const [currentStepId, setCurrentStepId] = useState<string | null>(null);
-  const [localSteps, setLocalSteps] = useState(steps);
-  const [localProfile, setLocalProfile] = useState(learnerProfile);
+  const [localSteps, _setLocalSteps] = useState(steps);
+  const [localProfile, _setLocalProfile] = useState(learnerProfile);
 
   // Set initial current step (first available/in_progress step)
   useEffect(() => {
@@ -60,7 +59,7 @@ export function WorkspaceLayout({
         // Silently handle save errors for now
       }
     },
-    [project.documentId, project.title],
+    [project.documentId, project.title]
   );
 
   const handleStepClick = useCallback((stepId: string) => {
@@ -71,27 +70,27 @@ export function WorkspaceLayout({
     <div className="flex flex-col h-dvh">
       {/* GP Bar at top */}
       <GpBar
-        totalGp={localProfile.totalGp}
-        level={localProfile.level}
-        currentStreak={localProfile.currentStreak}
         avatarPreset={localProfile.avatarPreset ?? "grower-1"}
+        currentStreak={localProfile.currentStreak}
+        level={localProfile.level}
+        totalGp={localProfile.totalGp}
       />
 
       {/* Three-pane workspace */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left: Progress Rail */}
         <ProgressRail
-          steps={localSteps}
           currentStepId={currentStepId}
           onStepClick={handleStepClick}
+          steps={localSteps}
         />
 
         {/* Center: Build Pane */}
         <BuildPane
           content={content}
+          currentStepTitle={currentStep?.title ?? "Getting started"}
           onContentChange={handleContentChange}
           projectTitle={project.title}
-          currentStepTitle={currentStep?.title ?? "Getting started"}
         />
 
         {/* Right: Learn Pane (Coach) */}

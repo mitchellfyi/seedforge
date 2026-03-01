@@ -30,10 +30,10 @@ export function ProjectPreview({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
       className="max-w-lg mx-auto border rounded-xl bg-card shadow-lg overflow-hidden"
+      initial={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.4 }}
     >
       {/* Header */}
       <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 p-6 border-b">
@@ -60,7 +60,7 @@ export function ProjectPreview({
           </h3>
           <ol className="space-y-1">
             {steps.map((stepTitle, i) => (
-              <li key={stepTitle} className="flex items-center gap-2 text-sm">
+              <li className="flex items-center gap-2 text-sm" key={stepTitle}>
                 <span className="flex-shrink-0 w-5 h-5 rounded-full bg-muted flex items-center justify-center text-xs text-muted-foreground">
                   {i + 1}
                 </span>
@@ -92,9 +92,9 @@ export function ProjectPreview({
       {/* CTA */}
       <div className="p-6 pt-0">
         <button
-          type="button"
-          onClick={handleStartBuilding}
           className="w-full py-3 px-6 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors shadow-sm"
+          onClick={handleStartBuilding}
+          type="button"
         >
           Start Building
         </button>

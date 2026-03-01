@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import { LandingNav, LandingFooter } from "@/components/landing/landing-nav";
 import { GardenDemoEmbed } from "@/components/garden-preview/garden-preview";
+import { LandingFooter, LandingNav } from "@/components/landing/landing-nav";
 
 export const metadata = {
   title: "The Garden | Seedforge",
@@ -65,34 +65,34 @@ export default function TheGardenPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             <PlantCard
-              emoji="🌺"
-              domain="Design & Art"
               description="Vivid, colourful flowers — painted dahlias and blooming palettes."
+              domain="Design & Art"
+              emoji="🌺"
             />
             <PlantCard
-              emoji="💎"
-              domain="Code & Tech"
               description="Geometric, crystalline plants that shimmer with precision."
+              domain="Code & Tech"
+              emoji="💎"
             />
             <PlantCard
-              emoji="📖"
-              domain="Writing & Language"
               description="Bookish trees with page-like leaves rustling with stories."
+              domain="Writing & Language"
+              emoji="📖"
             />
             <PlantCard
-              emoji="🍄"
-              domain="Science & Knowledge"
               description="Bioluminescent mushrooms and ferns glowing with discovery."
+              domain="Science & Knowledge"
+              emoji="🍄"
             />
             <PlantCard
-              emoji="🧵"
-              domain="Craft & Making"
               description="Textile-flowers with fabric petals — handmade and warm."
+              domain="Craft & Making"
+              emoji="🧵"
             />
             <PlantCard
-              emoji="🎵"
-              domain="Music & Performance"
               description="Flowers that hum and vibrate with rhythm and melody."
+              domain="Music & Performance"
+              emoji="🎵"
             />
           </div>
 
@@ -114,8 +114,8 @@ export default function TheGardenPage() {
               },
             ].map((item) => (
               <div
-                key={item.stage}
                 className="rounded-lg bg-white/5 border border-white/5 px-4 py-3 text-center"
+                key={item.stage}
               >
                 <div className="text-sm font-semibold text-[#4CAF50]">
                   {item.stage}
@@ -149,36 +149,36 @@ export default function TheGardenPage() {
 
           <div className="grid sm:grid-cols-2 gap-6">
             <ClassCard
+              bonus="Bonus XP from learning new skills and cross-domain connections"
               emoji="🌿"
+              garden="Wild, lush, beautifully overgrown"
               name="The Naturalist"
               quote="I learn by exploring and wondering."
               style="Curiosity-driven, broad, loves variety"
-              bonus="Bonus XP from learning new skills and cross-domain connections"
-              garden="Wild, lush, beautifully overgrown"
             />
             <ClassCard
+              bonus="Bonus XP from deep assessments and revision cycles"
               emoji="🔬"
+              garden="Orderly, precise, with a greenhouse"
               name="The Analyst"
               quote="I learn by understanding deeply."
               style="Methodical, thorough, loves mastery"
-              bonus="Bonus XP from deep assessments and revision cycles"
-              garden="Orderly, precise, with a greenhouse"
             />
             <ClassCard
+              bonus="Bonus XP from artifact quality and project completion"
               emoji="🎨"
+              garden="Workshop-garden hybrid with a forge"
               name="The Maker"
               quote="I learn by building things."
               style="Hands-on, artifact-focused, loves creating"
-              bonus="Bonus XP from artifact quality and project completion"
-              garden="Workshop-garden hybrid with a forge"
             />
             <ClassCard
+              bonus="Bonus XP from streaks. Companions grow faster."
               emoji="🌱"
+              garden="Cosy, gentle, with water features"
               name="The Nurturer"
               quote="I learn by helping things grow."
               style="Patient, steady, loves consistency"
-              bonus="Bonus XP from streaks. Companions grow faster."
-              garden="Cosy, gentle, with water features"
             />
           </div>
         </div>
@@ -197,28 +197,28 @@ export default function TheGardenPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             <EggCard
+              creatures="Chameleon, butterfly, peacock"
+              domain="Design & Art"
               emoji="🌈"
               name="Prism Egg"
-              domain="Design & Art"
-              creatures="Chameleon, butterfly, peacock"
             />
             <EggCard
+              creatures="Fox, octopus, spider"
+              domain="Code & Tech"
               emoji="⚡"
               name="Circuit Egg"
-              domain="Code & Tech"
-              creatures="Fox, octopus, spider"
             />
             <EggCard
+              creatures="Owl, raven, cat"
+              domain="Writing"
               emoji="🖋️"
               name="Ink Egg"
-              domain="Writing"
-              creatures="Owl, raven, cat"
             />
             <EggCard
+              creatures="Tortoise, frog, beetle"
+              domain="Science"
               emoji="🦴"
               name="Fossil Egg"
-              domain="Science"
-              creatures="Tortoise, frog, beetle"
             />
           </div>
 
@@ -239,8 +239,8 @@ export default function TheGardenPage() {
               },
             ].map((item) => (
               <div
-                key={item.stage}
                 className="rounded-lg bg-white/5 border border-white/5 px-4 py-3 text-center"
+                key={item.stage}
               >
                 <div className="text-sm font-semibold text-[#E8A83E]">
                   {item.stage}
@@ -305,11 +305,11 @@ export default function TheGardenPage() {
       <section className="px-6 py-24">
         <div className="max-w-2xl mx-auto text-center">
           <Image
-            src="/brand/seed_anvil.png"
             alt="Seedforge anvil"
-            width={120}
-            height={120}
             className="mx-auto mb-8 drop-shadow-[0_0_30px_rgba(212,146,42,0.3)]"
+            height={120}
+            src="/brand/seed_anvil.png"
+            width={120}
           />
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
             Start growing your garden
@@ -319,14 +319,14 @@ export default function TheGardenPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
-              href="/register"
               className="px-8 py-3 text-base font-semibold rounded-lg bg-primary hover:bg-[#E8A83E] text-primary-foreground transition-colors shadow-lg shadow-primary/25"
+              href="/register"
             >
               Start building — free
             </Link>
             <Link
-              href="/api/auth/guest?redirectUrl=/dashboard"
               className="px-8 py-3 text-base font-medium rounded-lg border border-[#FFF8F0]/20 text-foreground/70 hover:text-foreground hover:border-[#FFF8F0]/40 transition-colors"
+              href="/api/auth/guest?redirectUrl=/dashboard"
             >
               Try as guest
             </Link>
@@ -343,13 +343,15 @@ function PlantCard({
   emoji,
   domain,
   description,
-}: { emoji: string; domain: string; description: string }) {
+}: {
+  emoji: string;
+  domain: string;
+  description: string;
+}) {
   return (
     <div className="rounded-xl bg-white/5 border border-white/5 p-6 hover:bg-white/[0.07] transition-colors">
       <div className="text-3xl mb-3">{emoji}</div>
-      <h3 className="text-base font-semibold text-foreground mb-1">
-        {domain}
-      </h3>
+      <h3 className="text-base font-semibold text-foreground mb-1">{domain}</h3>
       <p className="text-sm text-foreground/50 leading-relaxed">
         {description}
       </p>
@@ -381,12 +383,10 @@ function ClassCard({
       </p>
       <div className="space-y-2 text-sm text-foreground/50">
         <p>
-          <span className="text-foreground/70 font-medium">Style:</span>{" "}
-          {style}
+          <span className="text-foreground/70 font-medium">Style:</span> {style}
         </p>
         <p>
-          <span className="text-foreground/70 font-medium">Bonus:</span>{" "}
-          {bonus}
+          <span className="text-foreground/70 font-medium">Bonus:</span> {bonus}
         </p>
         <p>
           <span className="text-foreground/70 font-medium">Garden:</span>{" "}
@@ -402,7 +402,12 @@ function EggCard({
   name,
   domain,
   creatures,
-}: { emoji: string; name: string; domain: string; creatures: string }) {
+}: {
+  emoji: string;
+  name: string;
+  domain: string;
+  creatures: string;
+}) {
   return (
     <div className="rounded-xl bg-white/5 border border-white/5 p-5 text-center">
       <div className="text-2xl mb-2">{emoji}</div>

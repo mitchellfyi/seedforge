@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { LandingNav, LandingFooter } from "@/components/landing/landing-nav";
+import { LandingFooter, LandingNav } from "@/components/landing/landing-nav";
 
 export const metadata = {
   title: "Why Seedforge | Seedforge",
@@ -43,27 +43,27 @@ export default function WhySeedforgePage() {
           <div className="grid md:grid-cols-2 gap-6">
             <ComparisonCard
               label="Not a course"
-              versus="Coursera, Udemy, Skillshare"
               problem="Front-load lectures and leave projects for the end — if they include them at all. You watch, you memorise, you might eventually apply what you learned."
               seedforge="No curriculum. No syllabus. No lectures. You learn by building. The project IS the learning — introduced at the start, not the end."
+              versus="Coursera, Udemy, Skillshare"
             />
             <ComparisonCard
               label="Not a tool"
-              versus="Canva, Replit, ChatGPT"
               problem="Do the work for you. They produce outputs without building skills. You get a result, but you don't grow."
               seedforge="Seedforge teaches you to do it yourself. You gain skills, not just outputs. The AI coaches — it doesn't create for you."
+              versus="Canva, Replit, ChatGPT"
             />
             <ComparisonCard
               label="Not a tutor"
-              versus="Khanmigo, Duolingo"
               problem="Test you on content with quizzes and drills. Learning is measured by scores, not by what you can make."
               seedforge="The artifact is the evidence of learning, not a quiz score. You prove understanding by building something real."
+              versus="Khanmigo, Duolingo"
             />
             <ComparisonCard
               label="Not coding-only"
-              versus="Codecademy AI Builder"
               problem="The only similar product is limited to a single domain and gated behind a subscription."
               seedforge="Learn anything by making anything — graphic design, history, biology, business strategy, creative writing, data analysis. The platform is domain-agnostic."
+              versus="Codecademy AI Builder"
             />
           </div>
         </div>
@@ -82,19 +82,19 @@ export default function WhySeedforgePage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             <ResearchCard
-              title="Constructionism"
-              origin="Seymour Papert, MIT"
               description="Learning is most powerful when you design and build personally meaningful, shareable artifacts. The artifact is an 'object to think with' — making ideas tangible sharpens them."
+              origin="Seymour Papert, MIT"
+              title="Constructionism"
             />
             <ResearchCard
-              title="Project-Based Learning"
-              origin="Research-backed framework"
               description="The project drives the learning, not the other way around. Introduced at the beginning — not as an afterthought. You learn and practice skills in order to complete it."
+              origin="Research-backed framework"
+              title="Project-Based Learning"
             />
             <ResearchCard
-              title="The Bloom&apos;s Flip"
-              origin="The critical mechanism"
               description="Traditional education goes bottom-up: memorise, then apply, then create. PBL inverts it — you start creating, and pull in knowledge as you need it."
+              origin="The critical mechanism"
+              title="The Bloom&apos;s Flip"
             />
           </div>
 
@@ -117,29 +117,29 @@ export default function WhySeedforgePage() {
 
           <div className="space-y-10">
             <BenefitRow
+              description="Tell the AI what you want to learn. It generates a personalised project with a tangible artifact outcome — scoped to your level and interests."
               number="1"
               title="A real project, not a lecture"
-              description="Tell the AI what you want to learn. It generates a personalised project with a tangible artifact outcome — scoped to your level and interests."
             />
             <BenefitRow
+              description="Concepts are delivered just-in-time, at the exact moment they become relevant to what you're building. No front-loaded theory."
               number="2"
               title="Teaching woven into making"
-              description="Concepts are delivered just-in-time, at the exact moment they become relevant to what you're building. No front-loaded theory."
             />
             <BenefitRow
+              description="A PDF guide, SVG files, a website, a presentation — something real you can use, share, or put in your portfolio."
               number="3"
               title="An artifact you're proud of"
-              description="A PDF guide, SVG files, a website, a presentation — something real you can use, share, or put in your portfolio."
             />
             <BenefitRow
+              description="The platform tracks skills across domains. Colour theory learned in a poster project applies to web design. Research skills from a field guide transfer to market analysis."
               number="4"
               title="Skills that transfer"
-              description="The platform tracks skills across domains. Colour theory learned in a poster project applies to web design. Research skills from a field guide transfer to market analysis."
             />
             <BenefitRow
+              description="Every completed project plants something in your garden — a living, visual record of everything you've learned and made."
               number="5"
               title="A garden that grows with you"
-              description="Every completed project plants something in your garden — a living, visual record of everything you've learned and made."
             />
           </div>
         </div>
@@ -149,11 +149,11 @@ export default function WhySeedforgePage() {
       <section className="px-6 py-24">
         <div className="max-w-2xl mx-auto text-center">
           <Image
-            src="/brand/seed_anvil.png"
             alt="Seedforge anvil"
-            width={120}
-            height={120}
             className="mx-auto mb-8 drop-shadow-[0_0_30px_rgba(212,146,42,0.3)]"
+            height={120}
+            src="/brand/seed_anvil.png"
+            width={120}
           />
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
             See the difference for yourself
@@ -164,14 +164,14 @@ export default function WhySeedforgePage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
-              href="/register"
               className="px-8 py-3 text-base font-semibold rounded-lg bg-primary hover:bg-[#E8A83E] text-primary-foreground transition-colors shadow-lg shadow-primary/25"
+              href="/register"
             >
               Start building — free
             </Link>
             <Link
-              href="/api/auth/guest?redirectUrl=/dashboard"
               className="px-8 py-3 text-base font-medium rounded-lg border border-[#FFF8F0]/20 text-foreground/70 hover:text-foreground hover:border-[#FFF8F0]/40 transition-colors"
+              href="/api/auth/guest?redirectUrl=/dashboard"
             >
               Try as guest
             </Link>
@@ -225,7 +225,11 @@ function ResearchCard({
   title,
   origin,
   description,
-}: { title: string; origin: string; description: string }) {
+}: {
+  title: string;
+  origin: string;
+  description: string;
+}) {
   return (
     <div className="rounded-xl bg-white/5 border border-white/5 p-6">
       <h3 className="text-lg font-semibold text-foreground mb-1">{title}</h3>
@@ -241,7 +245,11 @@ function BenefitRow({
   number,
   title,
   description,
-}: { number: string; title: string; description: string }) {
+}: {
+  number: string;
+  title: string;
+  description: string;
+}) {
   return (
     <div className="flex items-start gap-6">
       <div className="flex-none w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-[#E8A83E] font-bold text-sm">

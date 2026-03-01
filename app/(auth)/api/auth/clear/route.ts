@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export function GET() {
   const html = `<html><body><h1>Cookies cleared</h1><a href="/">Go to homepage</a></body></html>`;
   const response = new NextResponse(html, {
     headers: { "Content-Type": "text/html" },

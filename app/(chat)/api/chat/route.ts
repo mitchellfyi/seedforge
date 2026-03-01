@@ -10,40 +10,40 @@ import {
 import { after } from "next/server";
 import { createResumableStreamContext } from "resumable-stream";
 import { auth, type UserType } from "@/app/(auth)/auth";
+import {
+  buildCompletionCoachPrompt,
+  buildScaffoldingCoachPrompt,
+} from "@/lib/ai/agents/scaffolding-coach";
 import { entitlementsByUserType } from "@/lib/ai/entitlements";
 import {
+  buildReturningUserPrompt,
+  onboardingSystemPrompt,
   type RequestHints,
   systemPrompt,
-  onboardingSystemPrompt,
-  buildReturningUserPrompt,
 } from "@/lib/ai/prompts";
 import {
-  getLanguageModel,
   getCoachingModel,
+  getLanguageModel,
   getProjectDesignerModel,
 } from "@/lib/ai/providers";
-import { createDocument } from "@/lib/ai/tools/create-document";
-import { updateDocument } from "@/lib/ai/tools/update-document";
-import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
-import { generateProject } from "@/lib/ai/tools/generate-project";
 import { advanceStep } from "@/lib/ai/tools/advance-step";
-import { insertContent } from "@/lib/ai/tools/insert-content";
 import { assessCheckpoint } from "@/lib/ai/tools/assess-checkpoint";
-import {
-  buildScaffoldingCoachPrompt,
-  buildCompletionCoachPrompt,
-} from "@/lib/ai/agents/scaffolding-coach";
+import { createDocument } from "@/lib/ai/tools/create-document";
+import { generateProject } from "@/lib/ai/tools/generate-project";
+import { insertContent } from "@/lib/ai/tools/insert-content";
+import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
+import { updateDocument } from "@/lib/ai/tools/update-document";
 import { isProductionEnvironment } from "@/lib/constants";
 import {
   createStreamId,
   deleteChatById,
   getChatById,
+  getDocumentById,
   getMessageCountByUserId,
   getMessagesByChatId,
+  getOrCreateLearnerProfile,
   getProjectById,
   getStepsByProjectId,
-  getOrCreateLearnerProfile,
-  getDocumentById,
   saveChat,
   saveMessages,
   updateChatTitleById,
@@ -248,11 +248,7 @@ export async function POST(request: Request) {
           ]
         : isOnboarding
           ? ["generateProject"]
-          : [
-              "createDocument",
-              "updateDocument",
-              "requestSuggestions",
-            ];
+          : ["createDocument", "updateDocument", "requestSuggestions"];
 
     const modelMessages = await convertToModelMessages(uiMessages);
 
@@ -320,9 +316,7 @@ export async function POST(request: Request) {
       onFinish: async ({ messages: finishedMessages }) => {
         if (isToolApprovalFlow) {
           for (const finishedMsg of finishedMessages) {
-            const existingMsg = uiMessages.find(
-              (m) => m.id === finishedMsg.id,
-            );
+            const existingMsg = uiMessages.find((m) => m.id === finishedMsg.id);
             if (existingMsg) {
               await updateMessage({
                 id: finishedMsg.id,
@@ -372,7 +366,7 @@ export async function POST(request: Request) {
             await createStreamId({ streamId, chatId: id });
             await streamContext.createNewResumableStream(
               streamId,
-              () => sseStream,
+              () => sseStream
             );
           }
         } catch (_) {
@@ -390,7 +384,7 @@ export async function POST(request: Request) {
     if (
       error instanceof Error &&
       error.message?.includes(
-        "AI Gateway requires a valid credit card on file to service requests",
+        "AI Gateway requires a valid credit card on file to service requests"
       )
     ) {
       return new ChatSDKError("bad_request:activate_gateway").toResponse();

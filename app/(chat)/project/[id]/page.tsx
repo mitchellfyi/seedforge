@@ -2,10 +2,10 @@ import { notFound, redirect } from "next/navigation";
 import { auth } from "@/app/(auth)/auth";
 import { WorkspaceLayout } from "@/components/workspace/workspace-layout";
 import {
+  getDocumentById,
+  getOrCreateLearnerProfile,
   getProjectById,
   getStepsByProjectId,
-  getOrCreateLearnerProfile,
-  getDocumentById,
 } from "@/lib/db/queries";
 
 export default async function ProjectPage({
@@ -33,9 +33,7 @@ export default async function ProjectPage({
   const [steps, learnerProfile, document] = await Promise.all([
     getStepsByProjectId({ projectId: id }),
     getOrCreateLearnerProfile({ userId: session.user.id }),
-    project.documentId
-      ? getDocumentById({ id: project.documentId })
-      : null,
+    project.documentId ? getDocumentById({ id: project.documentId }) : null,
   ]);
 
   const coachChatId = project.coachChatId ?? id;
@@ -43,11 +41,11 @@ export default async function ProjectPage({
 
   return (
     <WorkspaceLayout
+      coachChatId={coachChatId}
+      initialContent={initialContent}
+      learnerProfile={learnerProfile}
       project={project}
       steps={steps}
-      learnerProfile={learnerProfile}
-      initialContent={initialContent}
-      coachChatId={coachChatId}
     />
   );
 }

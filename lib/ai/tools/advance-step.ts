@@ -2,22 +2,22 @@ import { tool, type UIMessageStreamWriter } from "ai";
 import type { Session } from "next-auth";
 import { z } from "zod";
 import {
+  createGardenPlant,
+  getLearnerProfile,
+  getProjectById,
   getStepById,
   getStepsByProjectId,
-  updateStep,
-  getProjectById,
-  updateProject,
-  getLearnerProfile,
   updateLearnerProfile,
-  createGardenPlant,
+  updateProject,
+  updateStep,
 } from "@/lib/db/queries";
 import {
   calculateStepGp,
-  getLevelFromGp,
   calculateStreakUpdate,
   DAILY_ACTIVITY_BONUS,
-  getProjectCompletionBonus,
+  getLevelFromGp,
   getPlantType,
+  getProjectCompletionBonus,
 } from "@/lib/gamification/gp";
 import type { ChatMessage } from "@/lib/types";
 
@@ -41,13 +41,19 @@ export const advanceStep = ({ session, dataStream }: AdvanceStepProps) =>
     }),
     execute: async ({ stepId, feedback, isFirstAttempt }) => {
       const userId = session.user?.id;
-      if (!userId) throw new Error("Not authenticated");
+      if (!userId) {
+        throw new Error("Not authenticated");
+      }
 
       const currentStep = await getStepById({ id: stepId });
-      if (!currentStep) throw new Error("Step not found");
+      if (!currentStep) {
+        throw new Error("Step not found");
+      }
 
       const profile = await getLearnerProfile({ userId });
-      if (!profile) throw new Error("Learner profile not found");
+      if (!profile) {
+        throw new Error("Learner profile not found");
+      }
 
       // Calculate GP
       const { total: gpAwarded, breakdown } = calculateStepGp({
@@ -57,14 +63,18 @@ export const advanceStep = ({ session, dataStream }: AdvanceStepProps) =>
       });
 
       // Mark step complete
-      await updateStep({ id: stepId, status: "completed", completedAt: new Date() });
+      await updateStep({
+        id: stepId,
+        status: "completed",
+        completedAt: new Date(),
+      });
 
       // Get all steps to find next
       const allSteps = await getStepsByProjectId({
         projectId: currentStep.projectId,
       });
       const nextStep = allSteps.find(
-        (s) => s.orderIndex === currentStep.orderIndex + 1,
+        (s) => s.orderIndex === currentStep.orderIndex + 1
       );
 
       // Unlock next step
@@ -78,7 +88,7 @@ export const advanceStep = ({ session, dataStream }: AdvanceStepProps) =>
       const streakUpdate = calculateStreakUpdate(
         profile.lastActiveDate,
         profile.currentStreak,
-        profile.longestStreak,
+        profile.longestStreak
       );
 
       let totalGpToAdd = gpAwarded;
@@ -113,7 +123,9 @@ export const advanceStep = ({ session, dataStream }: AdvanceStepProps) =>
 
       if (isProjectComplete && proj) {
         // Award completion bonus
-        const completionBonus = getProjectCompletionBonus(proj.gpEarned + totalGpToAdd);
+        const completionBonus = getProjectCompletionBonus(
+          proj.gpEarned + totalGpToAdd
+        );
         const finalTotalGp = newTotalGp + completionBonus;
         const finalLevel = getLevelFromGp(finalTotalGp);
 
@@ -181,7 +193,7 @@ export const advanceStep = ({ session, dataStream }: AdvanceStepProps) =>
                 newTotalGp +
                   (proj
                     ? getProjectCompletionBonus(proj.gpEarned + totalGpToAdd)
-                    : 0),
+                    : 0)
               )
             : newLevel,
           leveledUp,

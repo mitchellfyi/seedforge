@@ -2,19 +2,20 @@ import { tool, type UIMessageStreamWriter } from "ai";
 import type { Session } from "next-auth";
 import { z } from "zod";
 import {
+  createNeedToKnows,
   createProject,
   createSteps,
-  createNeedToKnows,
   getOrCreateLearnerProfile,
-  updateLearnerProfile,
   saveDocument,
-  updateProject,
+  updateLearnerProfile,
 } from "@/lib/db/queries";
 import type { ChatMessage } from "@/lib/types";
 import { generateUUID } from "@/lib/utils";
 
 const projectSpecSchema = z.object({
-  title: z.string().describe("Project title (e.g., 'Victorian Architecture Field Guide')"),
+  title: z
+    .string()
+    .describe("Project title (e.g., 'Victorian Architecture Field Guide')"),
   drivingQuestion: z
     .string()
     .describe("Open-ended driving question starting with 'How might you...'"),
@@ -27,46 +28,61 @@ const projectSpecSchema = z.object({
   complexity: z.enum(["beginner", "intermediate", "advanced"]),
   targetAudience: z.string().optional(),
   tone: z.string().optional(),
-  steps: z.array(
-    z.object({
-      title: z.string(),
-      teachingObjective: z
-        .string()
-        .describe("What the user should LEARN in this step"),
-      makingObjective: z
-        .string()
-        .describe("What the user should WRITE/CREATE in this step"),
-      instructions: z.string().describe("Detailed step instructions"),
-      checkpoint: z
-        .string()
-        .describe("How we know this step is done — assessment criteria"),
-      estimatedMinutes: z.number(),
-      scaffoldingLevel: z.enum([
-        "full_guidance",
-        "coached",
-        "light_touch",
-        "autonomous",
-      ]),
-      gpValue: z
-        .number()
-        .min(30)
-        .max(80)
-        .describe("GP awarded on completion, scaled by difficulty"),
-    }),
-  ).min(4).max(8),
+  steps: z
+    .array(
+      z.object({
+        title: z.string(),
+        teachingObjective: z
+          .string()
+          .describe("What the user should LEARN in this step"),
+        makingObjective: z
+          .string()
+          .describe("What the user should WRITE/CREATE in this step"),
+        instructions: z.string().describe("Detailed step instructions"),
+        checkpoint: z
+          .string()
+          .describe("How we know this step is done — assessment criteria"),
+        estimatedMinutes: z.number(),
+        scaffoldingLevel: z.enum([
+          "full_guidance",
+          "coached",
+          "light_touch",
+          "autonomous",
+        ]),
+        gpValue: z
+          .number()
+          .min(30)
+          .max(80)
+          .describe("GP awarded on completion, scaled by difficulty"),
+      })
+    )
+    .min(4)
+    .max(8),
   needToKnows: z.array(
     z.object({
       title: z.string(),
       description: z.string(),
       category: z.enum(["knowledge", "skill", "tool"]),
-    }),
+    })
   ),
-  learnerProfile: z.object({
-    interests: z.array(z.string()).describe("User's learning interests extracted from conversation"),
-    priorExperience: z.array(z.string()).describe("Skills or domains the user already has experience with"),
-    preferredComplexity: z.enum(["beginner", "intermediate", "advanced"]).describe("Calibrated complexity level"),
-    initialScaffoldingLevel: z.enum(["full_guidance", "coached", "light_touch", "autonomous"]).describe("Starting scaffolding level based on experience"),
-  }).describe("Learner profile data extracted from the onboarding conversation"),
+  learnerProfile: z
+    .object({
+      interests: z
+        .array(z.string())
+        .describe("User's learning interests extracted from conversation"),
+      priorExperience: z
+        .array(z.string())
+        .describe("Skills or domains the user already has experience with"),
+      preferredComplexity: z
+        .enum(["beginner", "intermediate", "advanced"])
+        .describe("Calibrated complexity level"),
+      initialScaffoldingLevel: z
+        .enum(["full_guidance", "coached", "light_touch", "autonomous"])
+        .describe("Starting scaffolding level based on experience"),
+    })
+    .describe(
+      "Learner profile data extracted from the onboarding conversation"
+    ),
 });
 
 type GenerateProjectProps = {
@@ -85,7 +101,9 @@ export const generateProject = ({
     inputSchema: projectSpecSchema,
     execute: async (spec) => {
       const userId = session.user?.id;
-      if (!userId) throw new Error("Not authenticated");
+      if (!userId) {
+        throw new Error("Not authenticated");
+      }
 
       // Create the document for the artifact
       const documentId = generateUUID();
@@ -114,7 +132,7 @@ export const generateProject = ({
       });
 
       // Create steps (first step is available, rest locked)
-      const stepRecords = await createSteps(
+      const _stepRecords = await createSteps(
         spec.steps.map((s, i) => ({
           projectId: projectRecord.id,
           orderIndex: i,
@@ -129,7 +147,7 @@ export const generateProject = ({
           metadata: {
             scaffoldingLevel: s.scaffoldingLevel,
           },
-        })),
+        }))
       );
 
       // Create need-to-knows
@@ -140,7 +158,7 @@ export const generateProject = ({
             title: ntk.title,
             description: ntk.description,
             category: ntk.category,
-          })),
+          }))
         );
       }
 

@@ -44,20 +44,25 @@ export function PlantComponent({ plant, projectTitle }: PlantComponentProps) {
     PLANT_EMOJIS[plant.plantType]?.general ??
     "🌱";
 
-  const scale = plant.growthStage === "blooming" ? 1.2 : plant.growthStage === "growing" ? 1.0 : 0.8;
+  const scale =
+    plant.growthStage === "blooming"
+      ? 1.2
+      : plant.growthStage === "growing"
+        ? 1.0
+        : 0.8;
 
   return (
     <motion.div
-      initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ type: "spring", stiffness: 200, damping: 15 }}
       className="flex flex-col items-center gap-1 p-2"
+      initial={{ scale: 0, opacity: 0 }}
+      transition={{ type: "spring", stiffness: 200, damping: 15 }}
     >
       <motion.div
         className="text-4xl cursor-pointer"
         style={{ transform: `scale(${scale})` }}
-        whileHover={{ scale: scale * 1.2 }}
         title={projectTitle}
+        whileHover={{ scale: scale * 1.2 }}
       >
         {emoji}
       </motion.div>

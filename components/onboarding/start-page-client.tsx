@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Chat } from "@/components/chat";
-import { DataStreamHandler } from "@/components/data-stream-handler";
 import {
+  DataStreamHandler,
   onSeedforgeStreamEvent,
   type SeedforgeStreamEvent,
 } from "@/components/data-stream-handler";
@@ -49,7 +49,7 @@ export function StartPageClient({
           setProjectSpec(event.data);
           setCurrentPhase(phases.length - 1);
         }
-      },
+      }
     );
     return () => {
       unsubscribe();
@@ -58,7 +58,9 @@ export function StartPageClient({
 
   // Track phase by counting user messages in the DOM (simple heuristic)
   useEffect(() => {
-    if (projectSpec) return; // Already at final phase
+    if (projectSpec) {
+      return; // Already at final phase
+    }
 
     const observer = new MutationObserver(() => {
       const userMessages = document.querySelectorAll('[data-role="user"]');
@@ -78,16 +80,14 @@ export function StartPageClient({
       <div className="flex items-center justify-center py-6 border-b bg-gradient-to-r from-primary/5 to-accent/20">
         <div className="text-center flex flex-col items-center gap-3">
           <Image
-            src="/brand/seed_anvil.png"
             alt="Seedforge"
-            width={56}
             height={56}
+            src="/brand/seed_anvil.png"
+            width={56}
           />
           <div>
             <h1 className="text-xl font-bold">
-              {isReturningUser
-                ? "Start a new project"
-                : "Welcome to Seedforge"}
+              {isReturningUser ? "Start a new project" : "Welcome to Seedforge"}
             </h1>
             <p className="text-sm text-muted-foreground mt-1 max-w-md">
               {isReturningUser
@@ -99,7 +99,7 @@ export function StartPageClient({
           {/* Phase Progress */}
           <div className="flex items-center gap-1 mt-2">
             {phases.map((phase, i) => (
-              <div key={phase} className="flex items-center">
+              <div className="flex items-center" key={phase}>
                 <div
                   className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                     i === currentPhase
@@ -114,7 +114,9 @@ export function StartPageClient({
                 {i < phases.length - 1 && (
                   <div
                     className={`w-4 h-px mx-1 ${
-                      i < currentPhase ? "bg-primary/40" : "bg-muted-foreground/20"
+                      i < currentPhase
+                        ? "bg-primary/40"
+                        : "bg-muted-foreground/20"
                     }`}
                   />
                 )}
@@ -127,16 +129,16 @@ export function StartPageClient({
       {/* Chat area */}
       <div className="flex-1 relative max-w-2xl mx-auto w-full">
         <Chat
-          id={chatId}
-          initialMessages={[]}
-          initialChatModel={chatModel}
-          initialVisibilityType="private"
-          isReadonly={false}
           autoResume={false}
           body={{
             isOnboarding: true,
             isReturningUser,
           }}
+          id={chatId}
+          initialChatModel={chatModel}
+          initialMessages={[]}
+          initialVisibilityType="private"
+          isReadonly={false}
         />
         <DataStreamHandler />
 

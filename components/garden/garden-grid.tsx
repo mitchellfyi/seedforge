@@ -1,7 +1,7 @@
 "use client";
 
-import { PlantComponent } from "./plant";
 import type { GardenPlant, Project } from "@/lib/db/schema";
+import { PlantComponent } from "./plant";
 
 interface GardenGridProps {
   plants: GardenPlant[];
@@ -17,9 +17,9 @@ export function GardenGrid({ plants, projects }: GardenGridProps) {
         <div className="text-6xl mb-4">🌱</div>
         <h3 className="text-lg font-semibold mb-2">Your garden is empty</h3>
         <p className="text-sm text-muted-foreground max-w-md">
-          Complete a project to plant your first seed. Each finished project adds
-          a new plant to your garden — flowers for quick projects, bushes for
-          medium ones, trees for big adventures.
+          Complete a project to plant your first seed. Each finished project
+          adds a new plant to your garden — flowers for quick projects, bushes
+          for medium ones, trees for big adventures.
         </p>
       </div>
     );

@@ -6,8 +6,7 @@ const SONNET = "anthropic/claude-sonnet-4-6";
 const HAIKU = "anthropic/claude-haiku-4-5-20251001";
 
 // Chat model: overridable via CHAT_MODEL env var, defaults to Sonnet, falls back to Haiku
-export const DEFAULT_CHAT_MODEL =
-  process.env.CHAT_MODEL || SONNET;
+export const DEFAULT_CHAT_MODEL = process.env.CHAT_MODEL || SONNET;
 
 // Fallback model used when the primary is unavailable
 export const FALLBACK_CHAT_MODEL = HAIKU;

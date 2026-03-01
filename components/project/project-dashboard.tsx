@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import type { GardenPlant, LearnerProfile, Project } from "@/lib/db/schema";
+import { getGpProgressInLevel, getLevelTitle } from "@/lib/gamification/gp";
 import { ProjectCard } from "./project-card";
-import type { Project, LearnerProfile, GardenPlant } from "@/lib/db/schema";
-import { getLevelTitle, getGpProgressInLevel } from "@/lib/gamification/gp";
 
 interface ProjectDashboardProps {
   projects: Project[];
@@ -20,7 +20,7 @@ export function ProjectDashboard({
   const completedProjects = projects.filter((p) => p.status === "completed");
   const progress = getGpProgressInLevel(
     learnerProfile.totalGp,
-    learnerProfile.level,
+    learnerProfile.level
   );
   const title = getLevelTitle(learnerProfile.level);
 
@@ -30,27 +30,27 @@ export function ProjectDashboard({
       <div className="grid grid-cols-4 gap-4">
         <StatCard
           label="Level"
-          value={`${learnerProfile.level}`}
           subtitle={title}
+          value={`${learnerProfile.level}`}
         />
         <StatCard
           label="Growth Points"
-          value={`${learnerProfile.totalGp}`}
           subtitle={`${progress.current}/${progress.needed} to next level`}
+          value={`${learnerProfile.totalGp}`}
         />
         <StatCard
           label="Streak"
+          subtitle={`Best: ${learnerProfile.longestStreak} days`}
           value={
             learnerProfile.currentStreak > 0
               ? `🔥 ${learnerProfile.currentStreak}`
               : "—"
           }
-          subtitle={`Best: ${learnerProfile.longestStreak} days`}
         />
         <StatCard
           label="Projects"
-          value={`${learnerProfile.completedProjectCount}`}
           subtitle="completed"
+          value={`${learnerProfile.completedProjectCount}`}
         />
       </div>
 
@@ -60,8 +60,8 @@ export function ProjectDashboard({
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-semibold">Your Garden</h2>
             <Link
-              href="/garden"
               className="text-sm text-primary hover:underline"
+              href="/garden"
             >
               View full garden
             </Link>
@@ -69,8 +69,8 @@ export function ProjectDashboard({
           <div className="flex gap-3 overflow-x-auto pb-2">
             {gardenPlants.slice(0, 8).map((plant) => (
               <div
-                key={plant.id}
                 className="flex-shrink-0 w-16 h-16 rounded-lg bg-accent/50 flex items-center justify-center text-2xl"
+                key={plant.id}
               >
                 {plant.plantType === "flower"
                   ? "🌸"
@@ -105,8 +105,8 @@ export function ProjectDashboard({
           you.
         </p>
         <Link
-          href="/start"
           className="inline-block py-2 px-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-medium transition-colors"
+          href="/start"
         >
           Start a new project
         </Link>

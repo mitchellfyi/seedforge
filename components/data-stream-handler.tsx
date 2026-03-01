@@ -125,7 +125,7 @@ export function DataStreamHandler() {
       // Handle artifact stream events (from Chat SDK)
       const artifactDefinition = artifactDefinitions.find(
         (currentArtifactDefinition) =>
-          currentArtifactDefinition.kind === artifact.kind,
+          currentArtifactDefinition.kind === artifact.kind
       );
 
       if (artifactDefinition?.onStreamPart) {

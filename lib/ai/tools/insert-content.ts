@@ -14,14 +14,16 @@ export const insertContent = ({ dataStream }: InsertContentProps) =>
       html: z
         .string()
         .describe(
-          "HTML content to insert into the editor. Use proper HTML tags (h2, p, ul, li, blockquote, etc.)",
+          "HTML content to insert into the editor. Use proper HTML tags (h2, p, ul, li, blockquote, etc.)"
         ),
       position: z
         .enum(["end", "cursor"])
         .default("end")
-        .describe("Where to insert: 'end' appends, 'cursor' inserts at cursor position"),
+        .describe(
+          "Where to insert: 'end' appends, 'cursor' inserts at cursor position"
+        ),
     }),
-    execute: async ({ html, position }) => {
+    execute: ({ html, position }) => {
       (dataStream as any).write({
         type: "data-insert-content",
         data: { html, position },

@@ -13,9 +13,13 @@ function buildThresholds() {
   let cumulative = 0;
   for (let lvl = 1; lvl <= 20; lvl++) {
     let gpForLevel: number;
-    if (lvl <= 5) gpForLevel = 100;
-    else if (lvl <= 10) gpForLevel = 200;
-    else gpForLevel = 350;
+    if (lvl <= 5) {
+      gpForLevel = 100;
+    } else if (lvl <= 10) {
+      gpForLevel = 200;
+    } else {
+      gpForLevel = 350;
+    }
 
     cumulative += gpForLevel;
     LEVEL_THRESHOLDS[lvl] = cumulative;
@@ -33,15 +37,18 @@ export function getLevelFromGp(totalGp: number): number {
 }
 
 export function getGpForNextLevel(currentLevel: number): number {
-  if (currentLevel >= 20) return 0;
+  if (currentLevel >= 20) {
+    return 0;
+  }
   return LEVEL_THRESHOLDS[currentLevel] ?? 100;
 }
 
 export function getGpProgressInLevel(
   totalGp: number,
-  currentLevel: number,
+  currentLevel: number
 ): { current: number; needed: number; percentage: number } {
-  const prevThreshold = currentLevel > 1 ? LEVEL_THRESHOLDS[currentLevel - 1] : 0;
+  const prevThreshold =
+    currentLevel > 1 ? LEVEL_THRESHOLDS[currentLevel - 1] : 0;
   const nextThreshold = LEVEL_THRESHOLDS[currentLevel] ?? prevThreshold + 100;
   const gpInLevel = totalGp - prevThreshold;
   const gpNeeded = nextThreshold - prevThreshold;
@@ -54,9 +61,15 @@ export function getGpProgressInLevel(
 }
 
 export function getLevelTitle(level: number): string {
-  if (level <= 5) return "Seedling";
-  if (level <= 10) return "Sprout";
-  if (level <= 20) return "Sapling";
+  if (level <= 5) {
+    return "Seedling";
+  }
+  if (level <= 10) {
+    return "Sprout";
+  }
+  if (level <= 20) {
+    return "Sapling";
+  }
   return "Sapling"; // Phase 1 cap
 }
 
@@ -100,8 +113,12 @@ export type GpBreakdown = {
 
 // Determine plant type from project duration
 export function getPlantType(estimatedMinutes: number): string {
-  if (estimatedMinutes < 60) return "flower";
-  if (estimatedMinutes <= 180) return "bush";
+  if (estimatedMinutes < 60) {
+    return "flower";
+  }
+  if (estimatedMinutes <= 180) {
+    return "bush";
+  }
   return "tree";
 }
 
@@ -109,22 +126,30 @@ export function getPlantType(estimatedMinutes: number): string {
 export function calculateStreakUpdate(
   lastActiveDate: string | null,
   currentStreak: number,
-  longestStreak: number,
+  longestStreak: number
 ): { newStreak: number; newLongest: number; isNewDay: boolean } {
   const today = new Date().toISOString().split("T")[0];
 
   if (!lastActiveDate) {
-    return { newStreak: 1, newLongest: Math.max(1, longestStreak), isNewDay: true };
+    return {
+      newStreak: 1,
+      newLongest: Math.max(1, longestStreak),
+      isNewDay: true,
+    };
   }
 
   if (lastActiveDate === today) {
-    return { newStreak: currentStreak, newLongest: longestStreak, isNewDay: false };
+    return {
+      newStreak: currentStreak,
+      newLongest: longestStreak,
+      isNewDay: false,
+    };
   }
 
   const lastDate = new Date(lastActiveDate);
   const todayDate = new Date(today);
   const diffDays = Math.floor(
-    (todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24),
+    (todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24)
   );
 
   if (diffDays === 1) {

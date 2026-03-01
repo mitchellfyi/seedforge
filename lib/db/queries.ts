@@ -24,17 +24,14 @@ import {
   type DBMessage,
   document,
   gardenPlant,
-  type GardenPlant,
-  learnerProfile,
   type LearnerProfile,
+  learnerProfile,
   message,
   needToKnow,
-  type NeedToKnow,
-  project,
   type Project,
-  step,
-  type Step,
+  project,
   type Suggestion,
+  step,
   stream,
   suggestion,
   type User,
@@ -646,15 +643,12 @@ export async function createProject(data: {
 
 export async function getProjectById({ id }: { id: string }) {
   try {
-    const [found] = await db
-      .select()
-      .from(project)
-      .where(eq(project.id, id));
+    const [found] = await db.select().from(project).where(eq(project.id, id));
     return found ?? null;
   } catch (_error) {
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get project by id",
+      "Failed to get project by id"
     );
   }
 }
@@ -669,7 +663,7 @@ export async function getProjectsByUserId({ userId }: { userId: string }) {
   } catch (_error) {
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get projects by user id",
+      "Failed to get projects by user id"
     );
   }
 }
@@ -693,10 +687,7 @@ export async function updateProject({
       .returning();
     return updated;
   } catch (_error) {
-    throw new ChatSDKError(
-      "bad_request:database",
-      "Failed to update project",
-    );
+    throw new ChatSDKError("bad_request:database", "Failed to update project");
   }
 }
 
@@ -704,7 +695,7 @@ export async function updateProject({
 // Seedforge: Step Queries
 // =============================================================================
 
-export async function createSteps(steps: Array<typeof step.$inferInsert>) {
+export async function createSteps(steps: (typeof step.$inferInsert)[]) {
   try {
     return await db.insert(step).values(steps).returning();
   } catch (_error) {
@@ -726,7 +717,7 @@ export async function getStepsByProjectId({
   } catch (_error) {
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get steps by project id",
+      "Failed to get steps by project id"
     );
   }
 }
@@ -771,14 +762,14 @@ export async function createNeedToKnows(
     title: string;
     description: string;
     category?: string;
-  }>,
+  }>
 ) {
   try {
     return await db.insert(needToKnow).values(items).returning();
   } catch (_error) {
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to create need-to-knows",
+      "Failed to create need-to-knows"
     );
   }
 }
@@ -796,7 +787,7 @@ export async function getNeedToKnowsByProjectId({
   } catch (_error) {
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get need-to-knows by project id",
+      "Failed to get need-to-knows by project id"
     );
   }
 }
@@ -816,7 +807,9 @@ export async function getOrCreateLearnerProfile({
       .from(learnerProfile)
       .where(eq(learnerProfile.userId, userId));
 
-    if (existing) return existing;
+    if (existing) {
+      return existing;
+    }
 
     const [created] = await db
       .insert(learnerProfile)
@@ -831,7 +824,7 @@ export async function getOrCreateLearnerProfile({
   } catch (_error) {
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get or create learner profile",
+      "Failed to get or create learner profile"
     );
   }
 }
@@ -846,7 +839,7 @@ export async function getLearnerProfile({ userId }: { userId: string }) {
   } catch (_error) {
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get learner profile",
+      "Failed to get learner profile"
     );
   }
 }
@@ -879,7 +872,7 @@ export async function updateLearnerProfile({
   } catch (_error) {
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to update learner profile",
+      "Failed to update learner profile"
     );
   }
 }
@@ -909,16 +902,12 @@ export async function createGardenPlant(data: {
   } catch (_error) {
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to create garden plant",
+      "Failed to create garden plant"
     );
   }
 }
 
-export async function getGardenPlantsByUserId({
-  userId,
-}: {
-  userId: string;
-}) {
+export async function getGardenPlantsByUserId({ userId }: { userId: string }) {
   try {
     return await db
       .select()
@@ -928,7 +917,7 @@ export async function getGardenPlantsByUserId({
   } catch (_error) {
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to get garden plants by user id",
+      "Failed to get garden plants by user id"
     );
   }
 }
@@ -952,7 +941,7 @@ export async function updateGardenPlant({
   } catch (_error) {
     throw new ChatSDKError(
       "bad_request:database",
-      "Failed to update garden plant",
+      "Failed to update garden plant"
     );
   }
 }

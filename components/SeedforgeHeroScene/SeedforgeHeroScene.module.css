@@ -74,7 +74,8 @@
   height: auto;
   image-rendering: pixelated;
   will-change: transform, opacity;
-  animation: anvilEntrance 0.6s ease-out 0.3s both,
+  animation:
+    anvilEntrance 0.6s ease-out 0.3s both,
     anvilStatic 0.01s linear 0.9s both;
 }
 
@@ -104,7 +105,8 @@
   width: clamp(72px, 12vw, 150px);
   height: auto;
   will-change: transform, opacity;
-  animation: seedGlowEntrance 0.8s ease-out 0.6s both,
+  animation:
+    seedGlowEntrance 0.8s ease-out 0.6s both,
     seedGlowPulse 3s ease-in-out 1.4s infinite;
 }
 
@@ -141,7 +143,8 @@
   height: auto;
   image-rendering: pixelated;
   will-change: transform, opacity;
-  animation: seedEntrance 0.4s ease-out 0.7s both,
+  animation:
+    seedEntrance 0.4s ease-out 0.7s both,
     seedFloat 3s ease-in-out 1.1s infinite;
 }
 
@@ -190,7 +193,8 @@
   transform-origin: bottom center;
   image-rendering: pixelated;
   will-change: transform, opacity;
-  animation: characterEntrance 0.6s ease-out 0.9s both,
+  animation:
+    characterEntrance 0.6s ease-out 0.9s both,
     characterIdle 2.5s ease-in-out 1.5s infinite;
 }
 
@@ -253,8 +257,16 @@
   pointer-events: none;
   opacity: 0;
   animation: shimmerFadeIn 0.01s linear 2.3s both;
-  mask-image: radial-gradient(ellipse 45% 45% at center, black 30%, transparent 70%);
-  -webkit-mask-image: radial-gradient(ellipse 45% 45% at center, black 30%, transparent 70%);
+  mask-image: radial-gradient(
+    ellipse 45% 45% at center,
+    black 30%,
+    transparent 70%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 45% 45% at center,
+    black 30%,
+    transparent 70%
+  );
 }
 
 @keyframes shimmerFadeIn {
@@ -299,7 +311,11 @@
 }
 
 /* ===== Placeholder fallback ===== */
-.placeholder {
+.placeholderBg,
+.placeholderAnvil,
+.placeholderSeed,
+.placeholderCharacter,
+.placeholderWordmark {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -310,7 +326,6 @@
 }
 
 .placeholderBg {
-  composes: placeholder;
   position: absolute;
   inset: 0;
   background-color: #1e3a2f;
@@ -318,7 +333,6 @@
 }
 
 .placeholderAnvil {
-  composes: placeholder;
   position: absolute;
   bottom: 30%;
   left: 50%;
@@ -330,7 +344,6 @@
 }
 
 .placeholderSeed {
-  composes: placeholder;
   position: absolute;
   bottom: 43%;
   left: 50%;
@@ -353,7 +366,6 @@
 }
 
 .placeholderCharacter {
-  composes: placeholder;
   position: absolute;
   bottom: 22%;
   left: 35%;
@@ -364,7 +376,6 @@
 }
 
 .placeholderWordmark {
-  composes: placeholder;
   position: absolute;
   top: 15%;
   left: 50%;

@@ -1,1 +1,1 @@
-export { SeedforgeHeroScene } from './SeedforgeHeroScene';
+export { SeedforgeHeroScene } from "./seedforge-hero-scene";

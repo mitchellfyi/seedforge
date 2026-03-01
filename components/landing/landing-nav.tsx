@@ -5,11 +5,11 @@ import { auth } from "@/app/(auth)/auth";
 
 export function LandingNav({
   position = "static",
-}: { position?: "absolute" | "static" }) {
+}: {
+  position?: "absolute" | "static";
+}) {
   const positionClass =
-    position === "absolute"
-      ? "absolute top-0 left-0 right-0 z-50"
-      : "";
+    position === "absolute" ? "absolute top-0 left-0 right-0 z-50" : "";
 
   return (
     <nav
@@ -17,12 +17,12 @@ export function LandingNav({
     >
       <Link href="/">
         <Image
-          src="/brand/seedforge.png"
           alt="Seedforge"
-          width={140}
-          height={46}
           className="h-12 w-auto drop-shadow-[0_0_12px_rgba(212,146,42,0.3)]"
+          height={46}
           priority
+          src="/brand/seedforge.png"
+          width={140}
         />
       </Link>
       <Suspense fallback={<NavLinks isLoggedIn={false} />}>
@@ -42,8 +42,8 @@ function NavLinks({ isLoggedIn }: { isLoggedIn: boolean }) {
     return (
       <div className="flex items-center gap-3">
         <Link
-          href="/dashboard"
           className="px-4 py-2 text-sm font-medium rounded-lg bg-primary hover:bg-primary/80 text-primary-foreground transition-colors"
+          href="/dashboard"
         >
           Go to Dashboard
         </Link>
@@ -54,32 +54,32 @@ function NavLinks({ isLoggedIn }: { isLoggedIn: boolean }) {
   return (
     <div className="flex items-center gap-3">
       <Link
-        href="/how-it-works"
         className="px-3 py-2 text-sm text-foreground/60 hover:text-foreground transition-colors hidden md:block"
+        href="/how-it-works"
       >
         How it works
       </Link>
       <Link
-        href="/the-garden"
         className="px-3 py-2 text-sm text-foreground/60 hover:text-foreground transition-colors hidden md:block"
+        href="/the-garden"
       >
         The Garden
       </Link>
       <Link
-        href="/why-seedforge"
         className="px-3 py-2 text-sm text-foreground/60 hover:text-foreground transition-colors hidden md:block"
+        href="/why-seedforge"
       >
         Why Seedforge
       </Link>
       <Link
-        href="/login"
         className="px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+        href="/login"
       >
         Log in
       </Link>
       <Link
-        href="/register"
         className="px-4 py-2 text-sm font-medium rounded-lg bg-primary hover:bg-primary/80 text-primary-foreground transition-colors"
+        href="/register"
       >
         Sign up
       </Link>
@@ -98,20 +98,20 @@ export function LandingFooter() {
             </h4>
             <div className="flex flex-col gap-2">
               <Link
-                href="/how-it-works"
                 className="text-sm text-foreground/40 hover:text-foreground/70 transition-colors"
+                href="/how-it-works"
               >
                 How it works
               </Link>
               <Link
-                href="/the-garden"
                 className="text-sm text-foreground/40 hover:text-foreground/70 transition-colors"
+                href="/the-garden"
               >
                 The Garden
               </Link>
               <Link
-                href="/why-seedforge"
                 className="text-sm text-foreground/40 hover:text-foreground/70 transition-colors"
+                href="/why-seedforge"
               >
                 Why Seedforge
               </Link>
@@ -123,14 +123,14 @@ export function LandingFooter() {
             </h4>
             <div className="flex flex-col gap-2">
               <Link
-                href="/register"
                 className="text-sm text-foreground/40 hover:text-foreground/70 transition-colors"
+                href="/register"
               >
                 Sign up free
               </Link>
               <Link
-                href="/login"
                 className="text-sm text-foreground/40 hover:text-foreground/70 transition-colors"
+                href="/login"
               >
                 Log in
               </Link>

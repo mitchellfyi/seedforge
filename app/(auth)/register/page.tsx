@@ -55,11 +55,11 @@ export default function Page() {
       <div className="flex w-full max-w-md flex-col gap-8 overflow-hidden rounded-2xl bg-card p-8 shadow-lg border border-border">
         <div className="flex flex-col items-center justify-center gap-2 text-center">
           <Image
-            src="/brand/seed_anvil.png"
             alt="Seedforge"
-            width={48}
-            height={48}
             className="mb-2 drop-shadow-[0_0_12px_rgba(212,146,42,0.3)]"
+            height={48}
+            src="/brand/seed_anvil.png"
+            width={48}
           />
           <h3 className="font-semibold text-xl text-foreground">Sign Up</h3>
           <p className="text-sm text-muted-foreground">

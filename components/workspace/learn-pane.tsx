@@ -21,12 +21,12 @@ export function LearnPane({ chatId, isReadonly = false }: LearnPaneProps) {
 
       <div className="flex-1 overflow-hidden">
         <Chat
+          autoResume={false}
           id={chatId}
-          initialMessages={[]}
           initialChatModel={COACHING_MODEL}
+          initialMessages={[]}
           initialVisibilityType="private"
           isReadonly={isReadonly}
-          autoResume={false}
         />
         <DataStreamHandler />
       </div>

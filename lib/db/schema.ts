@@ -81,7 +81,7 @@ export const voteDeprecated = pgTable(
     return {
       pk: primaryKey({ columns: [table.chatId, table.messageId] }),
     };
-  },
+  }
 );
 
 export type VoteDeprecated = InferSelectModel<typeof voteDeprecated>;
@@ -101,7 +101,7 @@ export const vote = pgTable(
     return {
       pk: primaryKey({ columns: [table.chatId, table.messageId] }),
     };
-  },
+  }
 );
 
 export type Vote = InferSelectModel<typeof vote>;
@@ -124,7 +124,7 @@ export const document = pgTable(
     return {
       pk: primaryKey({ columns: [table.id, table.createdAt] }),
     };
-  },
+  }
 );
 
 export type Document = InferSelectModel<typeof document>;
@@ -150,7 +150,7 @@ export const suggestion = pgTable(
       columns: [table.documentId, table.documentCreatedAt],
       foreignColumns: [document.id, document.createdAt],
     }),
-  }),
+  })
 );
 
 export type Suggestion = InferSelectModel<typeof suggestion>;
@@ -168,7 +168,7 @@ export const stream = pgTable(
       columns: [table.chatId],
       foreignColumns: [chat.id],
     }),
-  }),
+  })
 );
 
 export type Stream = InferSelectModel<typeof stream>;
@@ -252,9 +252,7 @@ export const needToKnow = pgTable("NeedToKnow", {
   stepId: uuid("stepId").references(() => step.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   description: text("description").notNull(),
-  category: varchar("category", { length: 50 })
-    .notNull()
-    .default("knowledge"),
+  category: varchar("category", { length: 50 }).notNull().default("knowledge"),
   isAddressed: boolean("isAddressed").notNull().default(false),
 });
 
@@ -271,7 +269,7 @@ export const learnerProfile = pgTable("LearnerProfile", {
   interests: json("interests").$type<string[]>().default([]),
   priorExperience: json("priorExperience").$type<string[]>().default([]),
   preferredComplexity: varchar("preferredComplexity", { length: 20 }).default(
-    "beginner",
+    "beginner"
   ),
   initialScaffoldingLevel: varchar("initialScaffoldingLevel", {
     length: 20,

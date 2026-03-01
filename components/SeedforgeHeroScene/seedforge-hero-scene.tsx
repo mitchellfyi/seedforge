@@ -1,20 +1,29 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState, useCallback } from 'react';
-import styles from './SeedforgeHeroScene.module.css';
-import { ParticleField } from './ParticleField';
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ParticleField } from "./particle-field";
+import styles from "./SeedforgeHeroScene.module.css";
 
 const ASSETS = {
-  bg: '/hero/bg-forest.png',
-  anvil: '/hero/anvil.png',
-  seed: '/hero/seed.png',
-  seedGlow: '/hero/seed-glow.png',
-  character: '/hero/character.png',
-  wordmark: '/hero/wordmark.png',
+  bg: "/hero/bg-forest.png",
+  anvil: "/hero/anvil.png",
+  seed: "/hero/seed.png",
+  seedGlow: "/hero/seed-glow.png",
+  character: "/hero/character.png",
+  wordmark: "/hero/wordmark.png",
+} as const;
+
+const ASSET_DIMENSIONS = {
+  anvil: { width: 200, height: 130 },
+  character: { width: 90, height: 140 },
+  seed: { width: 80, height: 80 },
+  seedGlow: { width: 150, height: 150 },
+  wordmark: { width: 500, height: 160 },
 } as const;
 
 type AssetKey = keyof typeof ASSETS;
-type LoadState = Record<string, 'loading' | 'loaded' | 'error'>;
+type LoadState = Record<string, "loading" | "loaded" | "error">;
 
 interface SeedforgeHeroSceneProps {
   className?: string;
@@ -43,27 +52,27 @@ export function SeedforgeHeroScene({
   useEffect(() => {
     const entries = Object.entries(ASSETS) as [AssetKey, string][];
     for (const [key, src] of entries) {
-      const img = new Image();
-      img.onload = () =>
-        setLoadState((prev) => ({ ...prev, [key]: 'loaded' }));
-      img.onerror = () =>
-        setLoadState((prev) => ({ ...prev, [key]: 'error' }));
+      const img = new window.Image();
+      img.onload = () => setLoadState((prev) => ({ ...prev, [key]: "loaded" }));
+      img.onerror = () => setLoadState((prev) => ({ ...prev, [key]: "error" }));
       img.src = src;
     }
   }, []);
 
   // Reduced motion detection
   useEffect(() => {
-    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mql.matches);
     const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mql.addEventListener('change', handler);
-    return () => mql.removeEventListener('change', handler);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
   }, []);
 
   // Particle activation delay (1.2s after mount)
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion) {
+      return;
+    }
     const timer = setTimeout(() => setParticlesActive(true), 1200);
     return () => clearTimeout(timer);
   }, [reducedMotion]);
@@ -71,19 +80,28 @@ export function SeedforgeHeroScene({
   // Responsive particle count
   useEffect(() => {
     const update = () => {
-      const w = window.innerWidth;
-      if (w < 768) setParticleCount(10);
-      else if (w < 1024) setParticleCount(15);
-      else setParticleCount(25);
+      const width = window.innerWidth;
+      if (width < 768) {
+        setParticleCount(10);
+      } else if (width < 1024) {
+        setParticleCount(15);
+      } else {
+        setParticleCount(25);
+      }
     };
     update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
 
   // Parallax (desktop only)
   const applyParallax = useCallback(
-    (ref: React.RefObject<HTMLDivElement | null>, x: number, y: number, strength: number) => {
+    (
+      ref: React.RefObject<HTMLDivElement | null>,
+      x: number,
+      y: number,
+      strength: number
+    ) => {
       if (ref.current) {
         ref.current.style.transform = `translate(${-x * strength}px, ${-y * strength}px)`;
       }
@@ -92,13 +110,19 @@ export function SeedforgeHeroScene({
   );
 
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion) {
+      return;
+    }
 
     const checkDesktop = () => window.innerWidth >= 1024;
-    if (!checkDesktop()) return;
+    if (!checkDesktop()) {
+      return;
+    }
 
     const scene = sceneRef.current;
-    if (!scene) return;
+    if (!scene) {
+      return;
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = scene.getBoundingClientRect();
@@ -121,91 +145,126 @@ export function SeedforgeHeroScene({
       parallaxRaf.current = requestAnimationFrame(tick);
     };
 
-    scene.addEventListener('mousemove', handleMouseMove);
+    scene.addEventListener("mousemove", handleMouseMove);
     parallaxRaf.current = requestAnimationFrame(tick);
 
     return () => {
-      scene.removeEventListener('mousemove', handleMouseMove);
+      scene.removeEventListener("mousemove", handleMouseMove);
       cancelAnimationFrame(parallaxRaf.current);
     };
   }, [reducedMotion, applyParallax]);
 
-  const isError = (key: AssetKey) => loadState[key] === 'error';
+  const isError = (key: AssetKey) => loadState[key] === "error";
 
   return (
     <div
-      ref={sceneRef}
-      className={`${styles.sceneContainer}${className ? ` ${className}` : ''}`}
-      role="img"
       aria-label="Animated pixel art scene: a glowing seed rests on a stone anvil in a magical forest clearing, with a small adventurer character looking up at it in wonder"
+      className={`${styles.sceneContainer}${className ? ` ${className}` : ""}`}
+      ref={sceneRef}
+      role="img"
     >
       {/* Layer 1: Background */}
-      {isError('bg') ? (
+      {isError("bg") ? (
         <div className={styles.placeholderBg}>BACKGROUND</div>
       ) : (
-        <img src={ASSETS.bg} alt="" className={styles.bg} />
+        <Image
+          alt=""
+          aria-hidden
+          className={styles.bg}
+          fill
+          priority
+          sizes="100vw"
+          src={ASSETS.bg}
+        />
       )}
 
       {/* Positioned content */}
       <div className={styles.sceneContent}>
         {/* Parallax group: forge (anvil + seed glow + seed) */}
-        <div ref={forgeRef} className={styles.parallaxForge}>
+        <div className={styles.parallaxForge} ref={forgeRef}>
           {/* Layer 2: Anvil */}
-          {isError('anvil') ? (
+          {isError("anvil") ? (
             <div className={styles.placeholderAnvil}>ANVIL</div>
           ) : (
-            <img src={ASSETS.anvil} alt="" className={styles.anvil} />
+            <Image
+              alt=""
+              aria-hidden
+              className={styles.anvil}
+              height={ASSET_DIMENSIONS.anvil.height}
+              src={ASSETS.anvil}
+              width={ASSET_DIMENSIONS.anvil.width}
+            />
           )}
 
           {/* Layer 3: Seed Glow */}
-          {isError('seedGlow') ? (
+          {isError("seedGlow") ? (
             <div className={styles.placeholderSeedGlow} />
           ) : (
-            <img src={ASSETS.seedGlow} alt="" className={styles.seedGlow} />
+            <Image
+              alt=""
+              aria-hidden
+              className={styles.seedGlow}
+              height={ASSET_DIMENSIONS.seedGlow.height}
+              src={ASSETS.seedGlow}
+              width={ASSET_DIMENSIONS.seedGlow.width}
+            />
           )}
 
           {/* Layer 4: Seed */}
-          {isError('seed') ? (
+          {isError("seed") ? (
             <div className={styles.placeholderSeed}>SEED</div>
           ) : (
-            <img src={ASSETS.seed} alt="" className={styles.seed} />
+            <Image
+              alt=""
+              aria-hidden
+              className={styles.seed}
+              height={ASSET_DIMENSIONS.seed.height}
+              src={ASSETS.seed}
+              width={ASSET_DIMENSIONS.seed.width}
+            />
           )}
         </div>
 
         {/* Parallax group: particles */}
-        <div ref={particlesRef} className={styles.parallaxParticles}>
+        <div className={styles.parallaxParticles} ref={particlesRef}>
           <ParticleField
-            count={particleCount}
             active={particlesActive}
+            count={particleCount}
             reducedMotion={reducedMotion}
           />
         </div>
 
         {/* Parallax group: character */}
-        <div ref={characterRef} className={styles.parallaxCharacter}>
+        <div className={styles.parallaxCharacter} ref={characterRef}>
           {/* Layer 6: Character */}
-          {isError('character') ? (
+          {isError("character") ? (
             <div className={styles.placeholderCharacter}>CHARACTER</div>
           ) : (
-            <img
-              src={ASSETS.character}
+            <Image
               alt=""
+              aria-hidden
               className={styles.character}
+              height={ASSET_DIMENSIONS.character.height}
+              src={ASSETS.character}
+              width={ASSET_DIMENSIONS.character.width}
             />
           )}
         </div>
 
         {/* Parallax group: wordmark */}
-        <div ref={wordmarkRef} className={styles.parallaxWordmark}>
+        <div className={styles.parallaxWordmark} ref={wordmarkRef}>
           {/* Layer 7: Wordmark */}
-          {isError('wordmark') ? (
+          {isError("wordmark") ? (
             <div className={styles.placeholderWordmark}>SEEDFORGE</div>
           ) : (
             <>
-              <img
-                src={ASSETS.wordmark}
+              <Image
                 alt=""
+                aria-hidden
                 className={styles.wordmarkImg}
+                height={ASSET_DIMENSIONS.wordmark.height}
+                src={ASSETS.wordmark}
+                width={ASSET_DIMENSIONS.wordmark.width}
               />
               <div className={styles.shimmer} />
             </>

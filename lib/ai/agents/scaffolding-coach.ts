@@ -2,7 +2,7 @@ import {
   buildCoachingSystemPrompt,
   buildCompletionPrompt,
 } from "@/lib/ai/prompts";
-import type { Project, Step, LearnerProfile } from "@/lib/db/schema";
+import type { LearnerProfile, Project, Step } from "@/lib/db/schema";
 
 export function buildScaffoldingCoachPrompt({
   project,
@@ -19,7 +19,7 @@ export function buildScaffoldingCoachPrompt({
 }): string {
   const completedSteps = steps.filter((s) => s.status === "completed");
   const upcomingSteps = steps.filter(
-    (s) => s.orderIndex > currentStep.orderIndex && s.status !== "completed",
+    (s) => s.orderIndex > currentStep.orderIndex && s.status !== "completed"
   );
 
   return buildCoachingSystemPrompt({

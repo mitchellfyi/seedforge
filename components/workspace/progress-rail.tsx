@@ -27,17 +27,11 @@ export function ProgressRail({
           const isActive = s.id === currentStepId;
           const isCompleted = s.status === "completed";
           const isLocked = s.status === "locked";
-          const isAvailable =
+          const _isAvailable =
             s.status === "available" || s.status === "in_progress";
 
           return (
             <button
-              type="button"
-              key={s.id}
-              onClick={() => {
-                if (!isLocked) onStepClick(s.id);
-              }}
-              disabled={isLocked}
               className={`w-full text-left p-3 rounded-lg transition-all text-sm ${
                 isActive
                   ? "bg-primary/10 border border-primary/30 shadow-sm"
@@ -47,6 +41,14 @@ export function ProgressRail({
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-muted/50 border border-transparent"
               }`}
+              disabled={isLocked}
+              key={s.id}
+              onClick={() => {
+                if (!isLocked) {
+                  onStepClick(s.id);
+                }
+              }}
+              type="button"
             >
               <div className="flex items-center gap-2">
                 {/* Step indicator */}
@@ -86,9 +88,9 @@ export function ProgressRail({
                   )}
                   {isActive && (
                     <motion.p
-                      initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       className="text-xs text-primary/70"
+                      initial={{ opacity: 0 }}
                     >
                       In progress
                     </motion.p>
@@ -103,8 +105,8 @@ export function ProgressRail({
       {/* Need to Know link */}
       <div className="p-3 border-t">
         <button
-          type="button"
           className="w-full text-left p-2 rounded-lg text-sm text-muted-foreground hover:bg-muted/50 transition-colors"
+          type="button"
         >
           📚 Need to Know
         </button>
@@ -115,13 +117,13 @@ export function ProgressRail({
 
 function CheckIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+    <svg fill="none" height="12" viewBox="0 0 12 12" width="12">
       <path
         d="M2 6L5 9L10 3"
         stroke="currentColor"
-        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeWidth="2"
       />
     </svg>
   );
@@ -129,21 +131,21 @@ function CheckIcon() {
 
 function LockIcon() {
   return (
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+    <svg fill="none" height="10" viewBox="0 0 10 10" width="10">
       <rect
-        x="2"
-        y="4"
-        width="6"
         height="5"
         rx="1"
         stroke="currentColor"
         strokeWidth="1.5"
+        width="6"
+        x="2"
+        y="4"
       />
       <path
         d="M3 4V3C3 1.89543 3.89543 1 5 1C6.10457 1 7 1.89543 7 3V4"
         stroke="currentColor"
-        strokeWidth="1.5"
         strokeLinecap="round"
+        strokeWidth="1.5"
       />
     </svg>
   );

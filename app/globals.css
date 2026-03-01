@@ -12,19 +12,19 @@
 
 /* define design tokens (light mode) */
 :root {
-  --background: hsl(32 100% 97%);        /* #FFF8F0 brand cream */
-  --foreground: hsl(240 28% 14%);        /* #1A1A2E brand dark base */
+  --background: hsl(32 100% 97%); /* #FFF8F0 brand cream */
+  --foreground: hsl(240 28% 14%); /* #1A1A2E brand dark base */
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(240 28% 14%);
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(240 28% 14%);
-  --primary: hsl(33 75% 41%);            /* #B8721A brand deep amber */
+  --primary: hsl(33 75% 41%); /* #B8721A brand deep amber */
   --primary-foreground: hsl(0 0% 100%);
   --secondary: hsl(30 20% 94%);
   --secondary-foreground: hsl(240 28% 14%);
   --muted: hsl(30 20% 94%);
   --muted-foreground: hsl(240 9% 46%);
-  --accent: hsl(156 20% 94%);            /* light forest tint */
+  --accent: hsl(156 20% 94%); /* light forest tint */
   --accent-foreground: hsl(240 28% 14%);
   --destructive: hsl(0 84.2% 60.2%);
   --destructive-foreground: hsl(0 0% 98%);
@@ -51,25 +51,25 @@
 
 /* define design tokens (dark mode) */
 .dark {
-  --background: hsl(240 28% 14%);        /* #1A1A2E brand dark base */
-  --foreground: hsl(32 100% 97%);        /* #FFF8F0 brand cream */
-  --card: hsl(240 17% 21%);              /* #2D2D3F brand shadow */
+  --background: hsl(240 28% 14%); /* #1A1A2E brand dark base */
+  --foreground: hsl(32 100% 97%); /* #FFF8F0 brand cream */
+  --card: hsl(240 17% 21%); /* #2D2D3F brand shadow */
   --card-foreground: hsl(32 100% 97%);
   --popover: hsl(240 17% 21%);
   --popover-foreground: hsl(32 100% 97%);
-  --primary: hsl(37 67% 50%);            /* #D4922A brand gold */
+  --primary: hsl(37 67% 50%); /* #D4922A brand gold */
   --primary-foreground: hsl(240 28% 14%);
   --secondary: hsl(240 17% 21%);
   --secondary-foreground: hsl(32 100% 97%);
   --muted: hsl(240 17% 21%);
-  --muted-foreground: hsl(240 9% 46%);   /* #6B6B7F brand anvil light */
-  --accent: hsl(156 32% 17%);            /* #1E3A2F brand forest dark */
+  --muted-foreground: hsl(240 9% 46%); /* #6B6B7F brand anvil light */
+  --accent: hsl(156 32% 17%); /* #1E3A2F brand forest dark */
   --accent-foreground: hsl(32 100% 97%);
   --destructive: hsl(0 62.8% 30.6%);
   --destructive-foreground: hsl(0 0% 98%);
-  --border: hsl(240 12% 33%);            /* #4A4A5E brand anvil dark */
+  --border: hsl(240 12% 33%); /* #4A4A5E brand anvil dark */
   --input: hsl(240 12% 33%);
-  --ring: hsl(37 67% 50%);               /* brand gold */
+  --ring: hsl(37 67% 50%); /* brand gold */
   --chart-1: hsl(220 70% 50%);
   --chart-2: hsl(160 60% 45%);
   --chart-3: hsl(30 80% 55%);
@@ -79,7 +79,7 @@
   --sidebar-foreground: hsl(32 100% 97%);
   --sidebar-primary: hsl(37 67% 50%);
   --sidebar-primary-foreground: hsl(240 28% 14%);
-  --sidebar-accent: hsl(156 32% 17%);    /* brand forest dark */
+  --sidebar-accent: hsl(156 32% 17%); /* brand forest dark */
   --sidebar-accent-foreground: hsl(32 100% 97%);
   --sidebar-border: hsl(240 17% 21%);
   --sidebar-ring: hsl(37 67% 50%);

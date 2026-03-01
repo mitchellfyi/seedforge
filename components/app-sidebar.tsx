@@ -1,15 +1,10 @@
 "use client";
 
+import { FolderOpen, LayoutDashboard, Plus, Sprout } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { User } from "next-auth";
-import {
-  FolderOpen,
-  LayoutDashboard,
-  Plus,
-  Sprout,
-} from "lucide-react";
 import { SidebarUserNav } from "@/components/sidebar-user-nav";
 import {
   Sidebar,
@@ -54,11 +49,11 @@ export function AppSidebar({
             <SidebarMenuButton asChild size="lg" tooltip="Seedforge">
               <Link href="/" onClick={() => setOpenMobile(false)}>
                 <Image
-                  src="/brand/seedforge.png"
                   alt="Seedforge"
-                  width={32}
-                  height={32}
                   className="shrink-0"
+                  height={32}
+                  src="/brand/seedforge.png"
+                  width={32}
                 />
                 <span className="font-semibold text-lg">Seedforge</span>
               </Link>
@@ -79,10 +74,7 @@ export function AppSidebar({
                     isActive={pathname === item.href}
                     tooltip={item.label}
                   >
-                    <Link
-                      href={item.href}
-                      onClick={() => setOpenMobile(false)}
-                    >
+                    <Link href={item.href} onClick={() => setOpenMobile(false)}>
                       <item.icon />
                       <span>{item.label}</span>
                     </Link>
@@ -100,13 +92,10 @@ export function AppSidebar({
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  tooltip="New Project"
                   className="bg-primary/10 hover:bg-primary/20 text-primary"
+                  tooltip="New Project"
                 >
-                  <Link
-                    href="/start"
-                    onClick={() => setOpenMobile(false)}
-                  >
+                  <Link href="/start" onClick={() => setOpenMobile(false)}>
                     <Plus />
                     <span className="font-medium">New Project</span>
                   </Link>

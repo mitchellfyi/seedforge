@@ -1,11 +1,7 @@
 import { gateway } from "@ai-sdk/gateway";
 import { customProvider } from "ai";
 import { isTestEnvironment } from "../constants";
-import {
-  DEFAULT_CHAT_MODEL,
-  FALLBACK_CHAT_MODEL,
-  PROJECT_GENERATION_MODEL,
-} from "./models";
+import { DEFAULT_CHAT_MODEL, PROJECT_GENERATION_MODEL } from "./models";
 
 export const myProvider = isTestEnvironment
   ? (() => {

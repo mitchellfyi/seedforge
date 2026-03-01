@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import styles from './SeedforgeHeroScene.module.css';
+import { useEffect, useMemo, useRef } from "react";
+import styles from "./SeedforgeHeroScene.module.css";
 
-type ParticleType = 'spark' | 'spore' | 'firefly';
+type ParticleType = "spark" | "spore" | "firefly";
 
 interface Particle {
   type: ParticleType;
@@ -18,6 +18,12 @@ interface Particle {
   phase: number;
 }
 
+interface ParticleDescriptor {
+  id: string;
+  size: number;
+  type: ParticleType;
+}
+
 interface ParticleFieldProps {
   count: number;
   active: boolean;
@@ -25,9 +31,9 @@ interface ParticleFieldProps {
 }
 
 const PARTICLE_IMAGES: Record<ParticleType, string> = {
-  spark: '/hero/particle-spark.png',
-  spore: '/hero/particle-spore.png',
-  firefly: '/hero/particle-firefly.png',
+  spark: "/hero/particle-spark.png",
+  spore: "/hero/particle-spore.png",
+  firefly: "/hero/particle-firefly.png",
 };
 
 const PARTICLE_SIZES: Record<ParticleType, number> = {
@@ -39,9 +45,13 @@ const PARTICLE_SIZES: Record<ParticleType, number> = {
 function getParticleType(index: number, total: number): ParticleType {
   const sparkCount = Math.round(total * 0.4);
   const sporeCount = Math.round(total * 0.3);
-  if (index < sparkCount) return 'spark';
-  if (index < sparkCount + sporeCount) return 'spore';
-  return 'firefly';
+  if (index < sparkCount) {
+    return "spark";
+  }
+  if (index < sparkCount + sporeCount) {
+    return "spore";
+  }
+  return "firefly";
 }
 
 function randomBetween(min: number, max: number) {
@@ -71,27 +81,31 @@ function resetParticle(p: Particle) {
   p.phase = Math.random() * Math.PI * 2;
 
   switch (p.type) {
-    case 'spark':
+    case "spark":
       p.x = randomBetween(42, 58);
       p.y = randomBetween(42, 48);
       p.vx = randomBetween(-0.3, 0.3);
       p.vy = randomBetween(-2, -4);
       p.lifetime = randomBetween(3000, 5000);
       break;
-    case 'spore':
+    case "spore":
       p.x = randomBetween(15, 85);
       p.y = randomBetween(25, 70);
       p.vx = randomBetween(-0.3, 0.3);
       p.vy = randomBetween(-0.5, -1);
-      p.lifetime = randomBetween(6000, 10000);
+      p.lifetime = randomBetween(6000, 10_000);
       break;
-    case 'firefly':
+    case "firefly":
       p.x = randomBetween(10, 90);
       p.y = randomBetween(10, 75);
       p.vx = 0;
       p.vy = 0;
       p.lifetime = randomBetween(2000, 4000);
       break;
+    default: {
+      const exhaustiveCheck: never = p.type;
+      throw new Error(`Unknown particle type: ${exhaustiveCheck}`);
+    }
   }
 }
 
@@ -105,7 +119,7 @@ function updateParticle(p: Particle, dt: number) {
   }
 
   switch (p.type) {
-    case 'spark': {
+    case "spark": {
       p.x += p.vx * progress * 100;
       p.y += p.vy * progress * 100;
       p.x += Math.sin(p.life * Math.PI * 4 + p.phase) * 0.1;
@@ -119,7 +133,7 @@ function updateParticle(p: Particle, dt: number) {
       }
       break;
     }
-    case 'spore': {
+    case "spore": {
       p.x += Math.sin(p.life * Math.PI * 2 + p.phase) * 0.15;
       p.y += p.vy * progress * 100;
       // Low opacity with fade in/out
@@ -133,13 +147,17 @@ function updateParticle(p: Particle, dt: number) {
       }
       break;
     }
-    case 'firefly': {
+    case "firefly": {
       // Blink: sine-based opacity
       p.opacity = Math.max(0, Math.sin(p.life * Math.PI)) * 0.8;
       // Slight drift
       p.x += Math.sin(p.life * Math.PI * 3 + p.phase) * 0.05;
       p.y += Math.cos(p.life * Math.PI * 2 + p.phase) * 0.03;
       break;
+    }
+    default: {
+      const exhaustiveCheck: never = p.type;
+      throw new Error(`Unknown particle type: ${exhaustiveCheck}`);
     }
   }
 }
@@ -154,25 +172,39 @@ export function ParticleField({
   const rafRef = useRef<number>(0);
   const initializedRef = useRef(false);
 
+  const particleDescriptors = useMemo<ParticleDescriptor[]>(() => {
+    return Array.from({ length: count }, (_, index) => {
+      const type = getParticleType(index, count);
+      return {
+        id: `particle-${type}-${index}`,
+        size: PARTICLE_SIZES[type],
+        type,
+      };
+    });
+  }, [count]);
+
   // Initialize particle pool
   useEffect(() => {
-    if (initializedRef.current) return;
+    if (initializedRef.current) {
+      return;
+    }
     initializedRef.current = true;
 
     const particles: Particle[] = [];
-    for (let i = 0; i < count; i++) {
-      const type = getParticleType(i, count);
-      const p = createParticle(type);
+    for (const descriptor of particleDescriptors) {
+      const particle = createParticle(descriptor.type);
       // Stagger initial life so particles don't all start at the same time
-      p.life = Math.random();
-      particles.push(p);
+      particle.life = Math.random();
+      particles.push(particle);
     }
     particlesRef.current = particles;
-  }, [count]);
+  }, [particleDescriptors]);
 
   // Animation loop
   useEffect(() => {
-    if (!active || reducedMotion) return;
+    if (!active || reducedMotion) {
+      return;
+    }
 
     let lastTime = performance.now();
 
@@ -190,12 +222,12 @@ export function ParticleField({
       const particles = particlesRef.current;
 
       for (let i = 0; i < particles.length && i < children.length; i++) {
-        const p = particles[i];
-        updateParticle(p, dt);
+        const particle = particles[i];
+        updateParticle(particle, dt);
 
-        const el = children[i] as HTMLElement;
-        el.style.transform = `translate(${p.x}vw, ${p.y}vh) scale(${p.scale})`;
-        el.style.opacity = String(p.opacity);
+        const element = children[i] as HTMLElement;
+        element.style.transform = `translate(${particle.x}vw, ${particle.y}vh) scale(${particle.scale})`;
+        element.style.opacity = String(particle.opacity);
       }
 
       rafRef.current = requestAnimationFrame(tick);
@@ -205,21 +237,21 @@ export function ParticleField({
     return () => cancelAnimationFrame(rafRef.current);
   }, [active, reducedMotion]);
 
-  if (reducedMotion) return null;
+  if (reducedMotion) {
+    return null;
+  }
 
   return (
-    <div ref={containerRef} className={styles.particleField}>
-      {Array.from({ length: count }, (_, i) => {
-        const type = getParticleType(i, count);
-        const size = PARTICLE_SIZES[type];
+    <div className={styles.particleField} ref={containerRef}>
+      {particleDescriptors.map((descriptor) => {
         return (
           <div
-            key={i}
             className={styles.particle}
+            key={descriptor.id}
             style={{
-              backgroundImage: `url(${PARTICLE_IMAGES[type]})`,
-              width: size,
-              height: size,
+              backgroundImage: `url(${PARTICLE_IMAGES[descriptor.type]})`,
+              width: descriptor.size,
+              height: descriptor.size,
               opacity: 0,
             }}
           />

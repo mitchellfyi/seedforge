@@ -27,10 +27,7 @@ import { useSidebar } from "./ui/sidebar";
 import { VersionFooter } from "./version-footer";
 import type { VisibilityType } from "./visibility-selector";
 
-export const artifactDefinitions = [
-  textArtifact,
-  imageArtifact,
-];
+export const artifactDefinitions = [textArtifact, imageArtifact];
 export type ArtifactKind = (typeof artifactDefinitions)[number]["kind"];
 
 export type UIArtifact = {
@@ -64,7 +61,7 @@ function PureArtifact({
   votes,
   isReadonly,
   selectedVisibilityType,
-  selectedModelId,
+  selectedModelId: _selectedModelId,
 }: {
   addToolApprovalResponse: UseChatHelpers<ChatMessage>["addToolApprovalResponse"];
   chatId: string;
